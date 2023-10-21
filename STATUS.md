@@ -9,8 +9,16 @@ the same then there should be no problems flashing.
 The code is well structured, which is good. There is some minor initial confusion.
 
  * `FX` for doing things MOS side. Pun not intended. Best left alone for now.
+  * Many of these "settings" have architecture specifics.
  * `VDU` basically a character echo with control sequences running on the VDP.
-  * 0, 1, 2, 3, 6 and 27 `VDU` initial control codes have no implemented meaning.
-  * 23 is heavily overloaded on the following byte values below 32.
+  * 0, 1, 2, 3, 6 and 27 
+  * Some `VDU` initial control codes have no implemented meaning.
+   * 0 nothing.
+   * 1 send to printer only.
+   * 2 print on.
+   * 3 print off.
+   * 6 enable screen.
+   * 27 send next literal less than 32 to screen. Seems ripe for values greater than 32?
+  * 23 is heavily overloaded on the following byte values below 32 as they have no UDG.
    * 0, 1, 7, 16, 27 and 28 are used when following a code 23.
 
