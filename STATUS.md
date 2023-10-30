@@ -21,4 +21,15 @@ The code is well structured, which is good. There is some minor initial confusio
    * 27 send next literal less than 32 to screen. Seems ripe for values greater than 32?
   * 23 is heavily overloaded on the following byte values below 32 as they have no UDG.
    * 0, 1, 7, 16, 27 and 28 are used when following a code 23.
+   * 127 is also not a real UDG, but is likely a font glyph (unprinted), given that
+   bitmaps are rectangular.
+   
+## The Emulator VDP
+
+The emulator uses a customized VDP, so altered files can be
+placed atop a copy of the quark104.
+
+`cp ~/agon-vdp/video/? ~/fab-agon-emulator/src/vdp/vdp-quark666/?`
+
+Where `?` is the modified file.
 

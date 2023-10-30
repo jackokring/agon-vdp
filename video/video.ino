@@ -7,6 +7,7 @@
 //					Steve Sims (Audio enhancements, refactoring, bug fixes)
 // Created:			22/03/2022
 // Last Updated:	12/09/2023
+// 6.66 Version with additions by S. Jackson.
 //
 // Modinfo:
 // 11/07/2022:		Baud rate tweaked for Agon Light, HW Flow Control temporarily commented out
@@ -47,9 +48,9 @@
 #include <HardwareSerial.h>
 #include <fabgl.h>
 
-#define VERSION			1
-#define REVISION		4
-#define RC				2
+#define VERSION			6
+#define REVISION		66
+#define RC				0
 
 #define	DEBUG			0						// Serial Debug Mode: 1 = enable
 #define SERIALKB		0						// Serial Keyboard: 1 = enable (Experimental)
