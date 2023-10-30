@@ -3,7 +3,7 @@
 
 #include <fabgl.h>
 
-#include "agon_keyboard.h"
+#include "agon_ps2.h"
 #include "graphics.h"
 #include "viewport.h"
 // TODO remove this, somehow
@@ -91,7 +91,7 @@ void cursorDown() {
 	//
 	// Check if scroll required
 	//
-	if (activeCursor->Y > activeViewport->Y2) {
+	if (activeCursor->Y + fontH - 1 > activeViewport->Y2) {
 		activeCursor->Y -= fontH;
 		if (~cursorBehaviour & 0x01) {
 			scrollRegion(activeViewport, 3, fontH);
