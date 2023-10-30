@@ -1,3 +1,4 @@
+// 6.66 Version with additions by S. Jackson.
 //
 // Title:			Agon Video BIOS
 // Author:			Dean Belfield
@@ -7,7 +8,6 @@
 //					Steve Sims (Audio enhancements, refactoring, bug fixes)
 // Created:			22/03/2022
 // Last Updated:	12/09/2023
-// 6.66 Version with additions by S. Jackson.
 //
 // Modinfo:
 // 11/07/2022:		Baud rate tweaked for Agon Light, HW Flow Control temporarily commented out
@@ -45,20 +45,22 @@
 // 05/09/2023:					+ New audio enhancements, improved mode change code
 // 12/09/2023:					+ Refactored
 
+#include <WiFi.h>
 #include <HardwareSerial.h>
 #include <fabgl.h>
 
-#define VERSION			6
-#define REVISION		66
-#define RC				0
+#define VERSION			1
+#define REVISION		4
+#define RC				2
 
 #define	DEBUG			0						// Serial Debug Mode: 1 = enable
 #define SERIALKB		0						// Serial Keyboard: 1 = enable (Experimental)
 #define SERIALBAUDRATE	115200
 
 #include "agon.h"								// Configuration file
-#include "agon_keyboard.h"						// Keyboard support
+#include "agon_ps2.h"						// Keyboard support
 #include "agon_audio.h"							// Audio support
+#include "agon_ttxt.h"
 #include "graphics.h"							// Graphics support
 #include "cursor.h"								// Cursor support
 #include "vdp_protocol.h"						// VDP Protocol
@@ -78,7 +80,7 @@ void setup() {
 	setupVDPProtocol();
 	processor = new VDUStreamProcessor(&VDPSerial);
 	processor->wait_eZ80();
-	setupKeyboard();
+	setupKeyboardAndMouse();
 	init_audio();
 	copy_font();
 	set_mode(1);
@@ -100,10 +102,13 @@ void loop() {
 		}
 		cursorVisible = ((count & 0xFFFF) == 0);
 		if (cursorVisible) {
+    		if (!cursorState && ttxtMode) ttxt_instance.flash(true);
 			cursorState = !cursorState;
 			do_cursor();
+      		if (!cursorState && ttxtMode) ttxt_instance.flash(false);
 		}
 		do_keyboard();
+		do_mouse();
 
 		if (processor->byteAvailable()) {
 			if (cursorState) {
@@ -155,6 +160,20 @@ void do_keyboard_terminal() {
 	//
 	while (processor->byteAvailable()) {
 		Terminal.write(processor->readByte());
+	}
+}
+
+// Handle the mouse
+//
+void do_mouse() {
+	// get mouse delta, if the mouse is active
+	MouseDelta delta;
+	if (mouseMoved(&delta)) {
+		auto mouse = getMouse();
+		auto mStatus = mouse->status();
+		// update mouse cursor position if it's active
+		setMouseCursorPos(mStatus.X, mStatus.Y);
+		processor->sendMouseData(&delta);
 	}
 }
 
