@@ -90,6 +90,10 @@ class VDUStreamProcessor {
 		void receiveFirmware();
 		void switchFirmware();
 
+    // Added S. Jackson
+    void vdu_sys_delete(); // in vdu_sys.h VDU 23, 127
+    void vdu_escape();     // in vdu.h     VDU 27
+
 	public:
 		uint16_t id = 65535;
 

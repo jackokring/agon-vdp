@@ -93,6 +93,9 @@ void VDUStreamProcessor::vdu_sys() {
 			case 0x1C: {					// VDU 23, 28
 				vdu_sys_hexload();
 			}	break;
+      case 0x7F: {          // VDU 23, 127, ...
+        vdu_sys_delete();
+      } break;
 		}
 	}
 	//
@@ -469,6 +472,13 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 	auto mask = readByte_t();		if (mask == -1) return;
 
 	setCursorBehaviour((uint8_t) setting, (uint8_t) mask);
+}
+
+// VDU 23, 127, ...
+//
+void VDUStreamProcessor::vdu_sys_delete() {
+  
+  debug_log("vdu_sys_delete\n\r");
 }
 
 // VDU 23, c, n1, n2, n3, n4, n5, n6, n7, n8: Redefine a display character

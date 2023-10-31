@@ -77,6 +77,9 @@ void VDUStreamProcessor::vdu(uint8_t c) {
 		case 0x1A:	// Reset text and graphics viewports
 			vdu_resetViewports();
 			break;
+    case 0x1B:  // Escape
+      vdu_escape();
+      break;
 		case 0x1C:	// Define a text viewport
 			vdu_textViewport();
 			break;
@@ -279,6 +282,14 @@ void VDUStreamProcessor::vdu_resetViewports() {
 	cursorHome();
 	pushPoint(0, 0);
 	debug_log("vdu_resetViewport\n\r");
+}
+
+// VDU 27: escape 6.66
+// Example: VDU 27, ...
+//
+void VDUStreamProcessor::vdu_escape() {
+
+  debug_log("vdu_escape\n\r");
 }
 
 // VDU 28: text viewport

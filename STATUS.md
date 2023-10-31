@@ -10,20 +10,19 @@ The code is well structured, which is good. There is some minor initial confusio
 
  * `FX` for doing things MOS side. Pun not intended. Best left alone for now.
   * Many of these "settings" have architecture specifics.
- * `VDU` basically a character echo with control sequences running on the VDP.
-  * 0, 1, 2, 3, 6 and 27 
+ * `VDU` basically a character echo with control sequences running on the VDP. 
   * Some `VDU` initial control codes have no implemented meaning.
-   * 0 nothing.
+   * **0** nothing. So should remain fixed.
    * 1 send to printer only.
    * 2 print on.
    * 3 print off.
    * 6 enable screen.
-   * 27 send next literal less than 32 to screen. Seems ripe for values greater than 32?
+   * **27** send next literal less than 32 to screen.
+    * I've requesitioned this one.
   * 23 is heavily overloaded on the following byte values below 32 as they have no UDG.
-   * 0, 1, 7, 16, 27 and 28 are used when following a code 23.
-   * 127 is also not a real UDG, but is likely a font glyph (unprinted), given that
-   bitmaps are rectangular.
-   
+   * **127** is also not a real UDG, but is likely a font glyph (unprinted), given that
+   bitmaps are rectangular. This is perhaps the ideal intercept.
+
 ## The Emulator VDP
 
 The emulator uses a customized VDP, so altered files can be
