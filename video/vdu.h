@@ -7,6 +7,16 @@
 #include "vdu_audio.h"
 #include "vdu_sys.h"
 
+// free buffers
+uint8_t * free256() {
+  return fabgl::FONT_AGON_DATA;
+}
+
+// free buffers in ttxt_instance unsigned short *
+// unsigned char *m_font_data_norm, *m_font_data_top, *m_font_data_bottom;
+// lower 32, 128 to 159. Both 19 and 20 height.
+// Apparently can't echo unheld versions in lower 32.
+
 // Handle VDU commands
 //
 void VDUStreamProcessor::vdu(uint8_t c) {

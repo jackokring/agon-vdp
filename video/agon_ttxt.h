@@ -341,7 +341,7 @@ void agon_ttxt::set_font_char(unsigned char dst, unsigned char src)
 {
   for (int i = 0; i < m_font.height; i++)
   {
-    uint16_t w = ttxtfont[src*20 + i];
+    uint16_t w = ttxtfont[(src - 32)*20 + i];
     m_font_data_norm[dst*2*m_font.height+2*i] = w & 0xff;
     m_font_data_norm[dst*2*m_font.height+2*i+1] = w >> 8;    
   }
@@ -638,4 +638,3 @@ void agon_ttxt::set_window(int left, int bottom, int right, int top)
   m_right = right;
   m_top = top;  
 }
-

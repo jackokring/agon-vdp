@@ -26,7 +26,6 @@ bool			legacyModes = false;			// Default legacy modes being false
 bool			rectangularPixels = false;		// Pixels are square by default
 uint8_t			palette[64];					// Storage for the palette
 
-
 // Copy the AGON font data from Flash to RAM
 //
 void copy_font() {
