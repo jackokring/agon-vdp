@@ -70,7 +70,7 @@ void VDUStreamProcessor::vdu_sys() {
 	//
 	// If mode < 32, then it's a system command
 	//
-	else if (mode < 32 || mode = 127) { // and delete character as glyph?
+	else if (mode < 32 || mode == 127) { // and delete character as glyph?
 		switch (mode) {
 			case 0x00: {					// VDU 23, 0
 	  			vdu_sys_video();			// Video system control

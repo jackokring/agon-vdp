@@ -79,7 +79,7 @@ bool getKeyboardKey(uint8_t *keycode, uint8_t *modifiers, uint8_t *vk, uint8_t *
 	#endif
 	
 	if (kb->getNextVirtualKey(&item, 0)) {
-		if (item.down) {
+		//if (item.down) {//keycode up events are still true mapping. how would _keycode change?
 			switch (item.vk) {
 				case fabgl::VK_LEFT:
 					_keycode = 0x08;
@@ -115,7 +115,7 @@ bool getKeyboardKey(uint8_t *keycode, uint8_t *modifiers, uint8_t *vk, uint8_t *
 				item.SCROLLLOCK << 6 |
 				item.GUI		<< 7
 			;
-		}
+		//}
 		*keycode = _keycode;
 		*modifiers = _modifiers;
 		*vk = item.vk;
