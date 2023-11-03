@@ -117,6 +117,7 @@ void agon_ttxt::display_char(int col, int row, unsigned char c)
   canvas->drawChar(col*16, row*m_font.height, c);
 }
 
+// Codes 128, +14, 15, 16, 27 technically free codes.
 
 // Process one line of text, parsing control codes.
 // row -- rown number 0..24
