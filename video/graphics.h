@@ -475,7 +475,7 @@ void drawCursor(Point p) {
 void cls(bool resetViewports) {
 	if (resetViewports) {
     	if (ttxtMode) {
-    		ttxt_instance.set_window(0,24,39,0);
+    		ttxt_instance.set_window(0,23,39,0);
 		}
 		viewportReset();
 	}
@@ -611,6 +611,10 @@ int8_t change_mode(uint8_t mode) {
 			break;
 		case 134:
 			errVal = change_resolution(2, VGA_640x240_60Hz, true);
+			break;
+		case 135:
+			// A possible extra mode
+			debug_log("vdu_mode: 136 novel\n\r");
 			break;
 		case 136:
 			errVal = change_resolution(64, QVGA_320x240_60Hz, true);		// VGA "Mode X"

@@ -24,6 +24,9 @@ The code is well structured, which is good. There is some minor initial confusio
      * **127** is also not a real UDG, but is likely a font glyph (unprinted),
      given that bitmaps are rectangular. This is perhaps the ideal intercept.
  * `Mode 7` codes 128+ (0, 14, 15, 16, 27) technically free control codes.
+   * The Box on/off codes are not used either (10, 11).
+   * Apparently I might do 24 instead of 25 lines.
+   * There's maybe an open mode number for double buffered `Mode 135`.
 
 ## The Emulator VDP
 

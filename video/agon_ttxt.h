@@ -9,6 +9,7 @@
 // 11/06/2023:    Fixed hold graphics semantics
 // 13/06/2023:    Refactored the code, made all private member variables prefix m_
 // 18/10/2023:    Integrated into the new VDP code. canvas is a global variable (unique pointer).
+// S. Jackson went 24 rows.
 
 #pragma once
 
@@ -61,7 +62,7 @@ private:
   // Font bitmaps for normal height, top half of double height, bottom half of double height.
   unsigned char *m_font_data_norm, *m_font_data_top, *m_font_data_bottom; 
   unsigned char *m_screen_buf; // Buffer containing all bytes in teletext page.
-  char m_dh_status[25]; // Double-height status per row: 0 none, 1 top half, 2 bottom half.
+  char m_dh_status[24]; // Double-height status per row: 0 none, 1 top half, 2 bottom half.
   int m_lastRow, m_lastCol;
   unsigned char m_stateFlags;
   RGB888 m_fg;
@@ -118,6 +119,7 @@ void agon_ttxt::display_char(int col, int row, unsigned char c)
 }
 
 // Codes 128, +14, 15, 16, 27 technically free codes.
+// Box codes? +10, 11.
 
 // Process one line of text, parsing control codes.
 // row -- rown number 0..24
@@ -145,7 +147,7 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
     {
        // If we update a control character in the line, reconsider its double height status and that of the line below.
        m_dh_status[row] = 0;
-       if (row < 24) m_dh_status[row+1] = 0;        
+       if (row < 23) m_dh_status[row+1] = 0;        
     }
     m_bg = colourLookup[COLOUR_BLACK];
     m_fg = colourLookup[COLOUR_WHITE];
@@ -355,14 +357,8 @@ void agon_ttxt::set_font_char(unsigned char dst, unsigned char src)
 void agon_ttxt::set_graph_char(unsigned char dst, unsigned char pat, bool contig)
 {
   int b1,b2,b3;
-  if (m_font.height==19)
-  {
-    b1 = 6; b2 = 7; b3 = 6; // Heights of the graphics blocks
-  }
-  else
-  { // font height = 20.
+    // font height = 20.
     b1 = 7; b2 = 6; b3 = 7;
-  }
   
   // Top row outer lines
   setgrpbyte(dst*2*m_font.height+0, pat>>0, contig, false);
@@ -405,15 +401,7 @@ void agon_ttxt::set_graph_char(unsigned char dst, unsigned char pat, bool contig
 
 int agon_ttxt::init(void)
 {
-  int oldh = m_font.height;
-  if (canvas->getHeight() >= 500)
-  {
-      m_font.height = 20;
-  }
-  else
-  {
-      m_font.height = 19;    
-  }
+  m_font.height = 20;
   m_font.pointSize = 12;
   m_font.width = 16;
   m_font.ascent = 12;
@@ -426,8 +414,6 @@ int agon_ttxt::init(void)
     if (m_font_data_norm == NULL)
       return -1;
   }
-  if (oldh != m_font.height)
-  {  
     for (int i=32; i<127; i++)
       set_font_char(i, i);
     // Set the characters that differ from standard ASCII (in UK teletext char set).
@@ -451,15 +437,12 @@ int agon_ttxt::init(void)
       set_graph_char(192+i, 32+i, true);
       set_graph_char(224+i, 32+i, false);
     }
-  }
   if (m_font_data_top == NULL)
   {
     m_font_data_top=(unsigned char*)PreferPSRAMAlloc(40*256);
     if (m_font_data_top == NULL)
       return -1;
   }
-  if (oldh != m_font.height)
-  {
     for (int i=32; i<256; i++)
     {
       unsigned char *p = m_font_data_norm+2*m_font.height*i;
@@ -470,15 +453,12 @@ int agon_ttxt::init(void)
         if (j%2 == 1) p+=2;
       }
     }
-  }
   if (m_font_data_bottom == NULL)
   {
     m_font_data_bottom=(unsigned char*)PreferPSRAMAlloc(40*256);
     if (m_font_data_bottom == NULL)
       return -1;
   }
-  if (oldh != m_font.height)
-  {
     for (int i=32; i<256; i++)
     {
       unsigned char *p = m_font_data_norm+2*m_font.height*i+(m_font.height==20?20:18);
@@ -489,16 +469,15 @@ int agon_ttxt::init(void)
         if (j%2 == (m_font.height==20)) p+=2;
       }
     }
-  }
   if (m_screen_buf == NULL)
   {
-    m_screen_buf=(unsigned char *)PreferPSRAMAlloc(1000);
+    m_screen_buf=(unsigned char *)PreferPSRAMAlloc(960);
     if (m_screen_buf == NULL)
       return -1;      
   }
   canvas->selectFont(&m_font);
   canvas->setGlyphOptions(GlyphOptions().FillBackground(true));
-  set_window(0, 24, 39, 0);
+  set_window(0, 23, 39, 0);
   cls();
   return 0;
 }
@@ -507,7 +486,7 @@ unsigned char agon_ttxt::get_screen_char(int x, int y)
 {
   x=x/m_font.width;
   y=y/m_font.height;
-  if (x<0 || x>39 || y<0 || y>24)
+  if (x<0 || x>39 || y<0 || y>23)
     return 0;
   else
     return m_screen_buf[x+y*40];
@@ -517,7 +496,7 @@ void agon_ttxt::draw_char(int x, int y, unsigned char c)
 {
   int cx=x/m_font.width;
   int cy=y/m_font.height;
-  if (cx<0 || cx>39 || cy<0 || cy>24)
+  if (cx<0 || cx>39 || cy<0 || cy>23)
     return;
   unsigned char oldb = m_screen_buf[cx+cy*40];
   m_screen_buf[cx+cy*40] = c;
@@ -542,17 +521,17 @@ void agon_ttxt::draw_char(int x, int y, unsigned char c)
 
 void agon_ttxt::scroll()
 {
-  if (m_left==0 && m_right==39 && m_top==0 && m_bottom==24)
+  if (m_left==0 && m_right==39 && m_top==0 && m_bottom==23)
   {
     /* Do the full screen */
     memmove(m_screen_buf, m_screen_buf+40, 960);
     memset(m_screen_buf+960, ' ', 40);
     m_lastRow--;
-    memmove(m_dh_status, m_dh_status+1, 24);
-    if (m_dh_status[23] == 1) 
-      m_dh_status[24] = 2;
+    memmove(m_dh_status, m_dh_status+1, 23);
+    if (m_dh_status[22] == 1) 
+      m_dh_status[23] = 2;
     else
-      m_dh_status[24] = 0;
+      m_dh_status[23] = 0;
      canvas->scroll(0, -m_font.height);
      if (m_dh_status[0] == 2)
      {
@@ -568,8 +547,8 @@ void agon_ttxt::scroll()
       memcpy(m_screen_buf+40*row+m_left,m_screen_buf+40*(row+1)+m_left , m_right+1-m_left);
     }
     memset(m_screen_buf+40*m_bottom+m_left, ' ', m_right + 1 - m_left);
-    memset(m_dh_status, 0, 25);
-    for (int row = 0; row < 25; row++)
+    memset(m_dh_status, 0, 24);
+    for (int row = 0; row < 24; row++)
     {    
       process_line(row, 40, AGON_TTXT_OP_REPAINT);
     }    
@@ -583,8 +562,8 @@ void agon_ttxt::cls()
   if (m_left==0 && m_right==39 && m_top==0 && m_bottom==24)
   {
       /* Do the full screen */
-      memset(m_screen_buf, ' ', 1000);
-      memset(m_dh_status, 0, 25);
+      memset(m_screen_buf, ' ', 960);
+      memset(m_dh_status, 0, 24);
       canvas->clear();
   }
   else
@@ -594,7 +573,7 @@ void agon_ttxt::cls()
       memset(m_screen_buf+40*row+m_left, ' ', m_right + 1 - m_left);
     }
     memset(m_dh_status, 0, 25);
-    for (int row=0; row < 25; row++)
+    for (int row=0; row < 24; row++)
     {
       this->process_line(row, 40, AGON_TTXT_OP_REPAINT);
     }
@@ -608,7 +587,7 @@ void agon_ttxt::flash(bool f)
   bool fUpdated = false;
   RGB888 oldbg = m_bg;
   RGB888 oldfg = m_fg;
-  for (int i = 0; i < 25; i++)
+  for (int i = 0; i < 24; i++)
   {
     for (int j = 0; j < 40; j++)
     {

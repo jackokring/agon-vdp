@@ -1,22 +1,9 @@
 # agon-vdp
 
-Part of the official Quark firmware for the Agon series of microcomputers
-
-### What is the Agon
-
-Agon is a modern, fully open-source, 8-bit microcomputer and microcontroller in one small, low-cost board. As a computer, it is a standalone device that requires no host PC: it puts out its own video (VGA), audio (2 identical mono channels), accepts a PS/2 keyboard and has its own mass-storage in the form of a µSD card.
-
-https://www.thebyteattic.com/p/agon.html
-
-### What is the VDP
-
-The VDP is a serial graphics terminal that takes a BBC Basic text output stream as input. The output is via the VGA connector on the Agon.
-
-It will process any valid BBC Basic VDU commands (starting with a character between 0 and 31).
-
-For example:
-
-`VDU 25, mode, x; y;` is the same as `PLOT mode, x, y` 
+**NOT** Part of the official Quark firmware for the Agon series of microcomputers.
+This fork is to test ideas, and make a firmware for me. It will be updated with
+most, if not all upstream official things, but might contain experiments and
+fix tests of any found bugs.
 
 ### Documentation
 
