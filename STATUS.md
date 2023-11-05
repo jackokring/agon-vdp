@@ -26,7 +26,11 @@ The code is well structured, which is good. There is some minor initial confusio
  * `Mode 7` codes 128+ (0, 14, 15, 16, 27) technically free control codes.
    * The Box on/off codes are not used either (10, 11).
    * Apparently I might do 24 instead of 25 lines.
+     * I think it might encourage some restriction thinking.
    * There's maybe an open mode number for double buffered `Mode 135`.
+   * Chopping out the unreferenced parts of the font and noticing height is
+   less than 500 always seems to save about 1% of the flash space.
+   This might be useful later with trimming the 20th row and `<WiFi.h>`.
 
 ## The Emulator VDP
 
