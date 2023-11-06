@@ -69,6 +69,7 @@ private:
   RGB888 m_bg;
   int m_left, m_bottom, m_right, m_top;
   bool m_flashPhase;
+  void setter(unsigned char dst, int i, uint16_t);
   void set_font_char(unsigned char dst, unsigned char src);
   void set_graph_char(unsigned char dst, unsigned char pat, bool contig);
   void setgrpbyte(int index, char dot, bool contig, bool inner);
@@ -334,6 +335,10 @@ void agon_ttxt::setgrpbyte(int index, char dot, bool contig, bool inner)
   m_font_data_norm[index] = b;
 }
 
+void agon_ttxt::setter(unsigned char dst, int i, uint16_t w) {
+	  m_font_data_norm[dst*2*m_font.height+2*i] = w & 0xff;
+    m_font_data_norm[dst*2*m_font.height+2*i+1] = w >> 8; 
+}
 
 // Store the required character from the ttxt_font into the font_data_norm member.
 // dst - position in font_data_norm
@@ -342,12 +347,13 @@ void agon_ttxt::setgrpbyte(int index, char dot, bool contig, bool inner)
 // while the target is a 16x19 or 16x20 font stored as bytes. The bottom row (blank)  will not be copied if font height = 19.
 void agon_ttxt::set_font_char(unsigned char dst, unsigned char src)
 {
-  for (int i = 0; i < m_font.height; i++)
+  setter(dst, 0, 0);
+  for (int i = 1; i < m_font.height - 1; i++)
   {
-    uint16_t w = ttxtfont[(src - 32)*20 + i];
-    m_font_data_norm[dst*2*m_font.height+2*i] = w & 0xff;
-    m_font_data_norm[dst*2*m_font.height+2*i+1] = w >> 8;    
+    uint16_t w = ttxtfont[(src - 32)*18 + i];
+    setter(dst, i,  w);  
   }
+  setter(dst, 19, 0);
 }
 
 // Store the required graphics character into the font_data_norm member.
