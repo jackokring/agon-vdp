@@ -31,6 +31,11 @@ The code is well structured, which is good. There is some minor initial confusio
    * Chopping out the unreferenced parts of the font and noticing height is
    less than 500 always seems to save about 1% of the flash space.
    This might be useful later with trimming the 20th row and `<WiFi.h>`.
+ * `Audio` yes, `class ProxyWaveformGenerator : public WaveformGenerator` and
+ just remember the last sample for an added `getModulator()` sample value. The
+ constructor obviously takes any `WaveformGenerator` to allow easy inserts.
+ Setting proxied frequency and volume can then be based on modulators from
+ other channels.
 
 ## The Emulator VDP
 
