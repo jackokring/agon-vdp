@@ -175,11 +175,14 @@ void VDUStreamProcessor::vdu_sys_video() {
 			switch(b) {
 			case 0:
 				setLegacyModes(true);
+				// fall through sequence
 				break;
 			case 1:
 				//anything specific?
-				break;
+			case 2:
+				// hope the video modes don't jumble again
 			default:
+				// current system default
 				setLegacyMode(false);//maintained code breaking change >0
 				break;
 			}
