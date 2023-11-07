@@ -498,7 +498,7 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 //
 void VDUStreamProcessor::vdu_sys_delete() {
   
-  debug_log("vdu_sys_delete\n\r");
+	debug_log("vdu_sys_delete\n\r");
 }
 
 // VDU 23, c, n1, n2, n3, n4, n5, n6, n7, n8: Redefine a display character

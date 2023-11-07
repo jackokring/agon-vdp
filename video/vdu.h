@@ -7,9 +7,13 @@
 #include "vdu_audio.h"
 #include "vdu_sys.h"
 
-// free buffers
+// free buffers if RAM gets tight
 uint8_t * free256() {
   return fabgl::FONT_AGON_DATA;
+}
+
+uint8_t * free8() {
+  return fabgl::FONT_AGON_DATA + 127 * 8;// DEL
 }
 
 // free buffers in ttxt_instance unsigned short *
@@ -87,9 +91,9 @@ void VDUStreamProcessor::vdu(uint8_t c) {
 		case 0x1A:	// Reset text and graphics viewports
 			vdu_resetViewports();
 			break;
-    case 0x1B:  // Escape
-      vdu_escape();
-      break;
+		case 0x1B:  // Escape
+			vdu_escape();
+			break;
 		case 0x1C:	// Define a text viewport
 			vdu_textViewport();
 			break;
@@ -302,7 +306,7 @@ void VDUStreamProcessor::vdu_resetViewports() {
 //
 void VDUStreamProcessor::vdu_escape() {
 
-  debug_log("vdu_escape\n\r");
+	debug_log("vdu_escape\n\r");
 }
 
 // VDU 28: text viewport
