@@ -96,7 +96,8 @@ bool updateVGAController(uint8_t colours) {
 // - 1: Invalid # of colours
 // - 2: Not enough memory for mode
 //
-int8_t change_resolution(uint8_t colours, const char * modeLine, bool doubleBuffered = false) {
+int8_t change_resolution(uint8_t colours, const char * modeLine, bool doubleBuffered = false,
+		boolean y256 = false) {
 	if (!updateVGAController(colours)) {			// If we can't update the controller then
 		return 1;									// Return the error
 	}
@@ -104,7 +105,8 @@ int8_t change_resolution(uint8_t colours, const char * modeLine, bool doubleBuff
 	canvas.reset();									// Delete the canvas
 
 	if (modeLine) {									// If modeLine is not a null pointer then
-		_VGAController->setResolution(modeLine, -1, -1, doubleBuffered);	// Set the resolution
+		// 256*256 modulo mode
+		_VGAController->setResolution(modeLine, -1, y256 ? 256 : -1, doubleBuffered);	// Set the resolution
 	} else {
 		debug_log("change_resolution: modeLine is null\n\r");
 	}

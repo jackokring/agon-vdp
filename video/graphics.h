@@ -622,8 +622,8 @@ int8_t change_mode(uint8_t mode) {
 			errVal = change_resolution(2, VGA_640x240_60Hz, true);
 			break;
 		case 135:
-			// A possible extra mode
-			debug_log("vdu_mode: 136 novel\n\r");
+			// A possible extra mode 267*256 modulo mode
+			errVal = change_resolution(64, VGA_256x384_60Hz, true, true);
 			break;
 		case 136:
 			errVal = change_resolution(64, QVGA_320x240_60Hz, true);		// VGA "Mode X"
