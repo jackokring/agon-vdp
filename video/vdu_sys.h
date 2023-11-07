@@ -163,8 +163,24 @@ void VDUStreamProcessor::vdu_sys_video() {
 		}	break;
 		case VDP_LEGACYMODES: {			// VDU 23, 0, &C1, n
 			auto b = readByte_t();		// Switch legacy modes on or off
-			if (b >= 0) {
-				setLegacyModes((bool) b);
+			// Assume MOS can send code based on byte $67
+			// \0 in older code
+			// if newer code can use $1
+			// this does of course invert code for aware software
+			// still doesn't solve .bas saved by version problem
+			// but machine code maintained should work
+			// if exec16/24 can detect byte at $040067 or $0B0067
+			// Is it better for compatiblity to be fixed in maintained code? 
+			// MOS print VDU 23, 0, &C1, ?$040067
+			switch(b) {
+			case 0:
+				setLegacyModes(true);
+				break;
+			case 1:
+				setLegacyMode(false);
+				break;
+			default:
+				break;
 			}
 		}	break;
 		case VDP_SWITCHBUFFER: {		// VDU 23, 0, &C3
