@@ -83,6 +83,8 @@
 #define AUDIO_CMD_ENABLE		8		// Enables a channel
 #define AUDIO_CMD_DISABLE		9		// Disables (destroys) a channel
 #define AUDIO_CMD_RESET			10		// Reset audio channel
+										// 11, 12 left blank on purpose
+#define AUDIO_CMD_FM_OP			13		// FM modulate a channel
 
 #define AUDIO_WAVE_DEFAULT		0		// Default waveform (Square wave)
 #define AUDIO_WAVE_SQUARE		0		// Square wave
@@ -93,6 +95,8 @@
 #define AUDIO_WAVE_VICNOISE		5		// VIC-style noise (supports frequency)
 #define AUDIO_WAVE_SAMPLE		8		// Sample playback, explicit buffer ID sent in following 2 bytes
 // negative values for waveforms indicate a sample number
+										// 9, 10, 11, 12 left blank on purpose
+#define AUDIO_WAVE_OPERATOR		13		// A nested FM operator
 
 #define AUDIO_SAMPLE_LOAD		0		// Send a sample to the VDP
 #define AUDIO_SAMPLE_CLEAR		1		// Clear/delete a sample

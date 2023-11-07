@@ -31,11 +31,11 @@ The code is well structured, which is good. There is some minor initial confusio
    * Chopping out the unreferenced parts of the font and noticing height is
    less than 500 always seems to save about 1% of the flash space.
    This might be useful later with trimming the 20th row and `<WiFi.h>`.
- * `Audio` yes, `class ProxyWaveformGenerator : public WaveformGenerator` and
- just remember the last sample for an added `getModulator()` sample value. The
- constructor obviously takes any `WaveformGenerator` to allow easy inserts.
- Setting proxied frequency and volume can then be based on modulators from
- other channels.
+ * `Audio` yes, `VDU 23, 0, &85, chan, 13, wave, (sampId;) dest_chan` performs
+ FM modulation of `dest_chan` by `chan`. The destination frequency value becomes
+ non functional while the modulator is enabled. Change the volume of `chan` for
+ depth of modulation. Change the waveform of `chan` to perhaps delete the
+ modulator.
 
 ## The Emulator VDP
 

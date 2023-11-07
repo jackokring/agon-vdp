@@ -62,4 +62,38 @@ int EnhancedSamplesGenerator::getDuration() {
 	return _sample.expired() ? 0 : _sample.lock()->getDuration();
 }
 
-#endif // ENHANCED_SAMPLES_GENERATOR_H
+// FM generator
+//
+class FMGenerator : public WaveformGenerator {
+	public:
+		FMGenerator(std::unique_ptr<WaveformGenerator> nest, std::shared_ptr<audio_channel> dest);
+
+		void setFrequency(int value) { frequency = 2 * value; nest->setFrequency(value); }
+		void setVolume(int value) { nest->setVolume(value); }
+		int volume() { return 0; } // null volume
+		bool enabled() { return nest->enabled(); }
+		void enable(bool value) { nest->enable(value); }
+		uint32_t duration() { return nest->duration(); }
+		
+		int getSample();
+	
+	private:
+		std::unique_ptr<WaveformGenerator> nest;
+		std::shared_ptr<audio_channel> dest;
+		int sample = 0;
+		int frequency = 0;
+};
+
+FMGenerator::FMGenerator(std::unique_ptr<WaveformGenerator> nest, std::shared_ptr<audio_channel> dest) {
+	this->nest = std::move(nest);
+	this->dest = dest;
+}
+
+int FMGenerator::getSample() {
+	sample = nest->getSample();
+	int freq = (sample * frequency) >> 8;// gain right
+	dest->setFrequency(freq);// double range at max volume
+	return 0;//return modulator quiet
+}
+
+#endif // ENHANCED_SAMPLES_GENERATOR_Hstd::shared_ptr<audio_channel>

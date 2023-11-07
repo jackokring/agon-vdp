@@ -22,7 +22,7 @@ class audio_channel {
 		uint8_t		play_note(uint8_t volume, uint16_t frequency, int32_t duration);
 		uint8_t		getStatus();
 		std::unique_ptr<fabgl::WaveformGenerator>	getSampleWaveform(uint16_t sampleId, std::shared_ptr<audio_channel> channelRef);
-		void		setWaveform(int8_t waveformType, std::shared_ptr<audio_channel> channelRef, uint16_t sampleId = 0);
+		void		setWaveform(int8_t waveformType, std::shared_ptr<audio_channel> channelRef, uint16_t sampleId = 0, std::shared_ptr<audio_channel> d_channelRef = nullptr);
 		void		setVolume(uint8_t volume);
 		void		setFrequency(uint16_t frequency);
 		void		setVolumeEnvelope(std::unique_ptr<VolumeEnvelope> envelope);
@@ -138,7 +138,9 @@ std::unique_ptr<fabgl::WaveformGenerator> audio_channel::getSampleWaveform(uint1
 	return nullptr;
 }
 
-void audio_channel::setWaveform(int8_t waveformType, std::shared_ptr<audio_channel> channelRef, uint16_t sampleId) {
+void audio_channel::setWaveform(int8_t waveformType,
+			std::shared_ptr<audio_channel> channelRef, uint16_t sampleId,
+			std::shared_ptr<audio_channel> d_channelRef) {
 	std::unique_ptr<fabgl::WaveformGenerator> newWaveform = nullptr;
 
 	switch (waveformType) {
@@ -164,6 +166,10 @@ void audio_channel::setWaveform(int8_t waveformType, std::shared_ptr<audio_chann
 			// Buffer-based sample playback
 			debug_log("audio_driver: using sample buffer %d for waveform\n\r", sampleId);
 			newWaveform = getSampleWaveform(sampleId, channelRef);
+			break;
+		case AUDIO_WAVE_OPERATOR:
+			// SoundGenerator.detach(this->_waveform.get());// remove attatch
+			newWaveform = make_unique_psram<FMGenerator>(std::move(this->_waveform), d_channelRef);
 			break;
 		default:
 			// negative values indicate a sample number
