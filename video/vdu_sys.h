@@ -177,9 +177,10 @@ void VDUStreamProcessor::vdu_sys_video() {
 				setLegacyModes(true);
 				break;
 			case 1:
-				setLegacyMode(false);
+				//anything specific?
 				break;
 			default:
+				setLegacyMode(false);//maintained code breaking change >0
 				break;
 			}
 		}	break;
