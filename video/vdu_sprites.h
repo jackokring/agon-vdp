@@ -27,7 +27,7 @@ void VDUStreamProcessor::vdu_sys_sprites(void) {
 			auto rw = readWord_t(); if (rw == -1) return;
 			auto rh = readWord_t(); if (rh == -1) return;
 
-			if (rw == 0 && rh == 0) {
+			if (rw == 0 || rh == 0) {
 				// TODO support defining bitmap from screen area
 				// as per Acorn GXR
 				// which defines area with last two graphics move commands
