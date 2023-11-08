@@ -42,9 +42,7 @@ The code is well structured, which is good. There is some minor initial confusio
 ## The Emulator VDP
 
 The emulator uses a customized VDP, so altered files can be
-placed atop a copy of the quark104.
+placed atop a copy of the quark104. Or after some VDP `Makefile` edits
 
-`cp ~/agon-vdp/video/? ~/fab-agon-emulator/src/vdp/vdp-quark666/?`
-
-Where `?` is the modified file.
+`./fab-agon-emulator --vdp ./src/vdp/vdp_quark666.so`
 

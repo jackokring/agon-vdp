@@ -49,9 +49,9 @@
 #include <HardwareSerial.h>
 #include <fabgl.h>
 
-#define VERSION			1
-#define REVISION		4
-#define RC				2
+#define VERSION			6
+#define REVISION		66
+#define RC				0
 
 #define	DEBUG			0						// Serial Debug Mode: 1 = enable
 #define SERIALKB		0						// Serial Keyboard: 1 = enable (Experimental)
@@ -96,6 +96,8 @@ void loop() {
 	bool cursorState = false;
 
 	while (true) {
+		if ((count & 0x7f) == 0) delay(1 /* -TM- ms */);
+	 		count++;
 		if (terminalMode) {
 			do_keyboard_terminal();
 			continue;

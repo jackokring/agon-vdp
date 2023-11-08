@@ -623,6 +623,8 @@ int8_t change_mode(uint8_t mode) {
 			break;
 		case 135:
 			// A possible extra mode 267*256 modulo mode
+			// from a fabglconf.h
+#define VGA_256x384_60Hz "\"256x384@60\" 17.09 256 272 304 352 384 387 391 404 -HSync -VSync DoubleScan"
 			errVal = change_resolution(64, VGA_256x384_60Hz, true, true);
 			break;
 		case 136:

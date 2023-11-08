@@ -183,7 +183,7 @@ void VDUStreamProcessor::vdu_sys_video() {
 				// hope the video modes don't jumble again
 			default:
 				// current system default
-				setLegacyMode(false);//maintained code breaking change >0
+				setLegacyModes(false);//maintained code breaking change >0
 				break;
 			}
 		}	break;
