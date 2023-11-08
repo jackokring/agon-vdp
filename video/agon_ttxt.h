@@ -348,7 +348,7 @@ void agon_ttxt::setter(unsigned char dst, int i, uint16_t w) {
 void agon_ttxt::set_font_char(unsigned char dst, unsigned char src)
 {
   setter(dst, 0, 0);
-  for (int i = 1; i < m_font.height - 1; i++)
+  for (int i = 0; i < m_font.height - 2; i++)
   {
     uint16_t w = ttxtfont[(src - 32)*18 + i];
     setter(dst, i,  w);  
@@ -530,8 +530,8 @@ void agon_ttxt::scroll()
   if (m_left==0 && m_right==39 && m_top==0 && m_bottom==23)
   {
     /* Do the full screen */
-    memmove(m_screen_buf, m_screen_buf+40, 960);
-    memset(m_screen_buf+960, ' ', 40);
+    memmove(m_screen_buf, m_screen_buf+40, 920);
+    memset(m_screen_buf+920, ' ', 40);
     m_lastRow--;
     memmove(m_dh_status, m_dh_status+1, 23);
     if (m_dh_status[22] == 1) 
@@ -565,7 +565,7 @@ void agon_ttxt::cls()
 {
   m_lastRow = -1;
   m_lastCol = -1;
-  if (m_left==0 && m_right==39 && m_top==0 && m_bottom==24)
+  if (m_left==0 && m_right==39 && m_top==0 && m_bottom==23)
   {
       /* Do the full screen */
       memset(m_screen_buf, ' ', 960);
@@ -578,7 +578,7 @@ void agon_ttxt::cls()
     {
       memset(m_screen_buf+40*row+m_left, ' ', m_right + 1 - m_left);
     }
-    memset(m_dh_status, 0, 25);
+    memset(m_dh_status, 0, 24);
     for (int row=0; row < 24; row++)
     {
       this->process_line(row, 40, AGON_TTXT_OP_REPAINT);
