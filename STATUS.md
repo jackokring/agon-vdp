@@ -29,7 +29,7 @@ The code is well structured, which is good. There is some minor initial confusio
      * I think it might encourage some restriction thinking.
      * Hi Mr. Oric, and wasn't line 25 local "tooltip" on the Oracle's Ceefax?
      Down on the OC Prestel, ancient of terminals?
-   * `Mode 135` is 16 colour 256 by 256 modulo mode.
+   * `Mode 135` is 16 colour 256 by 384 modulo mode.
    * Chopping out the unreferenced parts of the font and noticing height is
    less than 500 always seems to save about 1% of the flash space.
    This might be useful later with trimming the 20th row and `<WiFi.h>`.

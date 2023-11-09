@@ -571,6 +571,7 @@ int8_t change_mode(uint8_t mode) {
 	    	if (errVal == 0) {
 	      		errVal = ttxt_instance.init();
 	    		if (errVal == 0) ttxtMode = true; 
+	    		// exit ttext allocation by reset?
 	    	}
 	    	break;
 		case 8:
@@ -606,6 +607,8 @@ int8_t change_mode(uint8_t mode) {
 		case 18:
 			errVal = change_resolution(2, SVGA_1024x768_60Hz);		// VDP 1.03 Mode 0
 			break;
+		case 128:
+			break;
 		case 129:
 			errVal = change_resolution(4, VGA_640x480_60Hz, true);
 			break;
@@ -624,11 +627,11 @@ int8_t change_mode(uint8_t mode) {
 			errVal = change_resolution(2, VGA_640x240_60Hz, true);
 			break;
 		case 135:
-			// A possible extra mode 256*256 modulo mode
+			// A possible extra mode 256*x modulo mode
 			// from a fabglconf.h
 #define VGA_256x384_60Hz "\"256x384@60\" 17.09 256 272 304 352 384 387 391 404 -HSync -VSync DoubleScan"
 // old mode 1 should use same memory max
-			errVal = change_resolution(16, VGA_256x384_60Hz, true, true);
+			errVal = change_resolution(16, VGA_256x384_60Hz, true);
 			break;
 		case 136:
 			errVal = change_resolution(64, QVGA_320x240_60Hz, true);		// VGA "Mode X"
@@ -653,7 +656,13 @@ int8_t change_mode(uint8_t mode) {
 			break;
 		case 143:
 			errVal = change_resolution(2, VGA_320x200_70Hz, true);
-			break;									
+			break;	
+		case 144:
+			break;
+		case 145:
+			break;
+		case 146:
+			break;								
 	}
 	if (errVal != 0) {
 		return errVal;
