@@ -351,7 +351,7 @@ void agon_ttxt::set_font_char(unsigned char dst, unsigned char src)
   for (int i = 0; i < m_font.height - 2; i++)
   {
     uint16_t w = ttxtfont[(src - 32)*18 + i];
-    setter(dst, i,  w);  
+    setter(dst, i + 1,  w);  
   }
   setter(dst, 19, 0);
 }
