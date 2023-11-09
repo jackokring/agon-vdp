@@ -170,7 +170,7 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
           for(int i = 0; i < 64; i++) {
           	if(m_fg == colourLookup[i]) {
           		// set backgroung immediate
-          		m_bg = colourLookup[(i + 8) & 0x0F];// a pattern of first 16? 
+          		m_bg = colourLookup[defaultPalette40[(i + 8) & 0x0F]];// a pattern of first 16? 
           		break;
           	}
           }
@@ -272,7 +272,7 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
         case 0x0A:// end box -> use alternate of 16
           for(int i = 0; i < 64; i++) {
           	if(m_fg == colourLookup[i]) {
-          		m_fg = colourLookup[(i + 8) & 0x0F];// a pattern of first 16? 
+          		m_fg = colourLookup[defaultPalette40[(i + 8) & 0x0F]];// a pattern of first 16? 
           		break;
           	}
           }
