@@ -120,7 +120,6 @@ void agon_ttxt::display_char(int col, int row, unsigned char c)
 }
 
 // Codes 128, +14, 15, 16, 27 technically free codes.
-// Box codes? +10, 11.
 
 // Process one line of text, parsing control codes.
 // row -- rown number 0..24
@@ -166,6 +165,15 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
         case 0x09:
           m_stateFlags &= ~TTXT_STATE_FLAG_FLASH;        
           if (op == AGON_TTXT_OP_FLASH) redraw = false;        
+          break;
+        case 0x0B:// start box -> alternate 16 background
+          for(int i = 0; i < 64; i++) {
+          	if(m_fg == colourLookup[i]) {
+          		// set backgroung immediate
+          		m_bg = colourLookup[(i + 8) & 0x0F];// a pattern of first 16? 
+          		break;
+          	}
+          }
           break;
         case 0x0c:
           m_stateFlags &= ~TTXT_STATE_FLAG_HEIGHT;
@@ -260,7 +268,16 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
           m_stateFlags |= TTXT_STATE_FLAG_FLASH;
           if (op==AGON_TTXT_OP_FLASH) redraw = true;        
           break;
-          case 0x11: 
+        // Unlikely subtitles will ever happen
+        case 0x0A:// end box -> use alternate of 16
+          for(int i = 0; i < 64; i++) {
+          	if(m_fg == colourLookup[i]) {
+          		m_fg = colourLookup[(i + 8) & 0x0F];// a pattern of first 16? 
+          		break;
+          	}
+          }
+          break;
+        case 0x11: 
           m_fg = colourLookup[COLOUR_RED];
           m_stateFlags |= TTXT_STATE_FLAG_GRAPH;
           m_stateFlags &= ~TTXT_STATE_FLAG_CONCEAL;
