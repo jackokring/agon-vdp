@@ -120,6 +120,19 @@ void agon_ttxt::display_char(int col, int row, unsigned char c)
 }
 
 // Codes 128, +14, 15, 16, 27 technically free codes.
+void invert_colour(RGB888 * colour) {
+for(int i = 0; i < 64; i++) {
+  	if(*colour == colourLookup[i]) {// 1 of 64
+  		// set backgroung immediate
+  		for(int j = 0; j < 16; j++) {
+  			if(defaultPalette10[j] == i) {
+  				*colour = colourLookup[defaultPalette10[(j + 8) & 0x0F]];// a pattern of first 16? 
+  				return;
+  			}
+  		}
+  	}
+  }
+}
 
 // Process one line of text, parsing control codes.
 // row -- rown number 0..24
@@ -167,13 +180,7 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
           if (op == AGON_TTXT_OP_FLASH) redraw = false;        
           break;
         case 0x0B:// start box -> alternate 16 background
-          for(int i = 0; i < 64; i++) {
-          	if(m_fg == colourLookup[i]) {
-          		// set backgroung immediate
-          		m_bg = colourLookup[defaultPalette40[(i + 8) & 0x0F]];// a pattern of first 16? 
-          		break;
-          	}
-          }
+          invert_colour(&m_bg);
           break;
         case 0x0c:
           m_stateFlags &= ~TTXT_STATE_FLAG_HEIGHT;
@@ -270,12 +277,7 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
           break;
         // Unlikely subtitles will ever happen
         case 0x0A:// end box -> use alternate of 16
-          for(int i = 0; i < 64; i++) {
-          	if(m_fg == colourLookup[i]) {
-          		m_fg = colourLookup[defaultPalette40[(i + 8) & 0x0F]];// a pattern of first 16? 
-          		break;
-          	}
-          }
+          invert_colour(&m_fg);
           break;
         case 0x11: 
           m_fg = colourLookup[COLOUR_RED];
