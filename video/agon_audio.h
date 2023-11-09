@@ -119,11 +119,13 @@ void setFrequency(uint8_t channel, uint16_t frequency) {
 
 // Set channel waveform
 //
-void setWaveform(uint8_t channel, int8_t waveformType, uint16_t sampleId, uint8_t d_channel = 0) {
+void setWaveform(uint8_t channel, int8_t waveformType, uint16_t sampleId,
+		uint8_t d_channel = 0, uint8_t mul = 0, uint8_t div = 0) {
 	if (channelEnabled(channel)) {
 		auto channelRef = audio_channels[channel];
 		auto d_channelRef = audio_channels[d_channel];
-		channelRef->setWaveform(waveformType, channelRef, sampleId, d_channelRef);
+		// fixed point ratio
+		channelRef->setWaveform(waveformType, channelRef, sampleId, d_channelRef, ((mul + 1) << 8) / (div + 1) );
 	}
 }
 

@@ -66,9 +66,11 @@ int EnhancedSamplesGenerator::getDuration() {
 //
 class FMGenerator : public WaveformGenerator {
 	public:
-		FMGenerator(std::unique_ptr<WaveformGenerator> nest, std::shared_ptr<audio_channel> dest);
-
-		void setFrequency(int value) { frequency = 2 * value; nest->setFrequency(value); }
+		FMGenerator(std::unique_ptr<WaveformGenerator> nest,
+			std::shared_ptr<audio_channel> dest, uint16_t muldiv);
+		
+		// frequency deviation max is ratio by frequency
+		void setFrequency(int value) { frequency = (muldiv * value) >> 8; nest->setFrequency(value); }
 		void setVolume(int value) { nest->setVolume(value); }
 		int volume() { return 0; } // null volume
 		bool enabled() { return nest->enabled(); }
@@ -82,17 +84,21 @@ class FMGenerator : public WaveformGenerator {
 		std::shared_ptr<audio_channel> dest;
 		int sample = 0;
 		int frequency = 0;
+		uint16_t muldiv = 256;// fixed point
 };
 
-FMGenerator::FMGenerator(std::unique_ptr<WaveformGenerator> nest, std::shared_ptr<audio_channel> dest) {
+FMGenerator::FMGenerator(std::unique_ptr<WaveformGenerator> nest,
+		std::shared_ptr<audio_channel> dest, uint16_t muldiv) {
 	this->nest = std::move(nest);
 	this->dest = dest;
+	this->muldiv = muldiv;
 }
 
 int FMGenerator::getSample() {
 	sample = nest->getSample();
-	int freq = (sample * frequency) >> 8;// gain right
-	dest->setFrequency(freq);// double range at max volume
+	int freq = ((sample + 128) * frequency) >> 7;// gain right
+	// 128 -> sample centre so 7 bit shift is frequency 
+	dest->setFrequency(freq);//  range at max volume
 	return 0;//return modulator quiet
 }
 

@@ -66,7 +66,7 @@ void VDUStreamProcessor::vdu_sys_audio() {
 		// Use like setSaveform but add destination channel byte on end
 		// Use volume for modulation gain
 		case AUDIO_CMD_FM_OP: {
-			// VDU 23, 0, &85, chan, 13, wave, (sampId;) dest_chan 
+			// VDU 23, 0, &85, chan, 13, wave, (sampId;) dest_chan, mul-1, div-1 
 			//read nested waveform
 			auto waveform = readByte_t();	if (waveform == -1) return;
 			auto sampleNum = 0;
@@ -80,11 +80,13 @@ void VDUStreamProcessor::vdu_sys_audio() {
 			// the frequency set for the destination is ignored
 			// if an operator is applied
 			auto d_channel = readByte_t();		if (d_channel == -1) return;
+			auto mul = readByte_t();			if (mul == -1) return;
+			auto div = readByte_t();			if (div == -1) return;
 
 			// set waveform, interpretting waveform number as a signed 8-bit value
 			// to allow for negative values to be used as sample numbers
 			setWaveform(channel, (int8_t) waveform, sampleNum);
-			setWaveform(channel, (int8_t) AUDIO_WAVE_OPERATOR, 0, d_channel);// Nest
+			setWaveform(channel, (int8_t) AUDIO_WAVE_OPERATOR, 0, d_channel, mul, div);// Nest
 		}	break;
 
 		case AUDIO_CMD_SAMPLE: {

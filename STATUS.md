@@ -33,11 +33,14 @@ The code is well structured, which is good. There is some minor initial confusio
    * Chopping out the unreferenced parts of the font and noticing height is
    less than 500 always seems to save about 1% of the flash space.
    This might be useful later with trimming the 20th row and `<WiFi.h>`.
- * `Audio` yes, `VDU 23, 0, &85, chan, 13, wave, (sampId;) dest_chan` performs
- FM modulation of `dest_chan` by `chan`. The destination frequency value becomes
- non functional while the modulator is enabled. Change the volume of `chan` for
- depth of modulation. Change the waveform of `chan` to perhaps delete the
- modulator.
+ * `Audio` yes, `VDU 23, 0, &85, chan, 13, wave, (sampId;) dest_chan, mul-1, div-1`
+ performs FM modulation of `dest_chan` by `chan`. The destination frequency value
+ becomes non-functional while a modulator is enabled. Change the volume of
+ `chan` for depth of modulation. Change the waveform of `chan` to perhaps
+ delete the modulator. Use zero biased `mul` and `div` to set the modulation
+ ratio applied to the `dest` channel. The source `chan` always runs at the
+ programmed frequency note. Applying more than 1 modulator to a channel has
+ undefined behaviour.
 
 ## The Emulator VDP
 
