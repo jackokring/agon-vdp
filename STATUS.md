@@ -13,7 +13,7 @@ The code is well structured, which is good. There is some minor initial confusio
  * `VDU` basically a character echo with control sequences running on the VDP. 
  Some `VDU` initial control codes have no implemented meaning.
    * **0** nothing. So should remain fixed.
-   * 1 send to printer only.
+   * 1 send to printer only. 
    * 2 print on.
    * 3 print off.
    * 6 enable screen.
@@ -32,8 +32,9 @@ The code is well structured, which is good. There is some minor initial confusio
      * I think it might encourage some restriction thinking.
      * Hi Mr. Oric, and wasn't line 25 local "tooltip" on the Oracle's Ceefax?
      Down on the OC Prestel, ancient of terminals?
-   * `$10` (End Box) does alternate forground colour (in progress).
-   * `$11` (Start Box) does alternate background colour (in progress).
+   * Alternate colour palette as it's a 16 colour mode really.
+     * `138` (End Box) does alternate forground colour.
+     * `139` (Start Box) does alternate background colour from foreground.
    * `Mode 135` is 16 colour 256 by 384 modulo mode.
    * Chopping out the unreferenced parts of the font and noticing height is
    less than 500 always seems to save about 1% of the flash space.
@@ -48,6 +49,7 @@ The code is well structured, which is good. There is some minor initial confusio
  undefined behaviour.
  * `VDU 23, 0, &C1, n` altered so maybe one day MOS will send byte $43 as `n`
  when running binaries for version control. Oh, I can dream. It's my fork.
+ I checked, MOS maybe thinks it's a string NUL terminal.
 
 ## The Emulator VDP
 

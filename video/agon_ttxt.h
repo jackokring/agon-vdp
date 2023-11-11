@@ -119,19 +119,19 @@ void agon_ttxt::display_char(int col, int row, unsigned char c)
   canvas->drawChar(col*16, row*m_font.height, c);
 }
 
-// Codes 128, +14, 15, 16, 27 technically free codes.
-void invert_colour(RGB888 * colour) {
-for(int i = 0; i < 64; i++) {
+// Codes 128, +0, 14, 15, 16, 27 technically free codes.
+uint8_t invert_colour(RGB888 * colour) {
+  for(int i = 0; i < 64; i++) {
   	if(*colour == colourLookup[i]) {// 1 of 64
   		// set backgroung immediate
   		for(int j = 0; j < 16; j++) {
   			if(defaultPalette10[j] == i) {
-  				*colour = colourLookup[defaultPalette10[(j + 8) & 0x0F]];// a pattern of first 16? 
-  				return;
+  				return defaultPalette10[(j + 8) & 0x0F];// a pattern of first 16? 
   			}
   		}
   	}
   }
+  return COLOUR_BLACK;//a default never used
 }
 
 // Process one line of text, parsing control codes.
@@ -162,6 +162,7 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
        m_dh_status[row] = 0;
        if (row < 23) m_dh_status[row+1] = 0;        
     }
+    // nice, line by line reset
     m_bg = colourLookup[COLOUR_BLACK];
     m_fg = colourLookup[COLOUR_WHITE];
     heldGraph = 0;
@@ -179,8 +180,9 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
           m_stateFlags &= ~TTXT_STATE_FLAG_FLASH;        
           if (op == AGON_TTXT_OP_FLASH) redraw = false;        
           break;
-        case 0x0B:// start box -> alternate 16 background
-          invert_colour(&m_bg);
+        case 0x0b:// start box -> alternate 16 background
+          // make faster assignment to background
+          m_bg = colourLookup[invert_colour(&m_fg)];
           break;
         case 0x0c:
           m_stateFlags &= ~TTXT_STATE_FLAG_HEIGHT;
@@ -193,7 +195,7 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
           if (m_dh_status[row] == 0)
           {
             m_dh_status[row] = 1;
-            if (row<24) {
+            if (row < 23) {
               m_dh_status[row+1] = 2;
             }
             m_font.data = m_font_data_top;
@@ -277,7 +279,9 @@ void agon_ttxt::process_line(int row, int col, agon_ttxt_op_t op)
           break;
         // Unlikely subtitles will ever happen
         case 0x0A:// end box -> use alternate of 16
-          invert_colour(&m_fg);
+          // helps with fast background alternates
+          // to return uint8_t
+          m_fg = colourLookup[invert_colour(&m_fg)];
           break;
         case 0x11: 
           m_fg = colourLookup[COLOUR_RED];
@@ -355,7 +359,7 @@ void agon_ttxt::setgrpbyte(int index, char dot, bool contig, bool inner)
 }
 
 void agon_ttxt::setter(unsigned char dst, int i, uint16_t w) {
-	  m_font_data_norm[dst*2*m_font.height+2*i] = w & 0xff;
+	m_font_data_norm[dst*2*m_font.height+2*i] = w & 0xff;
     m_font_data_norm[dst*2*m_font.height+2*i+1] = w >> 8; 
 }
 
@@ -450,7 +454,7 @@ int agon_ttxt::init(void)
     set_font_char('_', '#'); // Hash mark.
     set_font_char('`', 151); // Em-dash.
     set_font_char('{', 188); // 1/4 fraction.
-    set_font_char('|', 157); // Dpuble vertical bar
+    set_font_char('|', 157); // Double vertical bar
     set_font_char('}', 190); // 3/4 fraction.
     set_font_char('~', 247); // Division.
     set_font_char(127, 129); // Block.
