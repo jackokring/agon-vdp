@@ -505,6 +505,7 @@ void VDUStreamProcessor::vdu_sys_delete() {
 	};
 	send_packet(PACKET_KEYCODE, sizeof packet, packet);
 	packet[3] = 0;// key up
+	// if you're woried about it then check the physical velocities of keys. :D
 	send_packet(PACKET_KEYCODE, sizeof packet, packet);
 	debug_log("vdu_sys_delete: Acknowledge action ready\n\r");
 }
