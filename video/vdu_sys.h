@@ -494,11 +494,19 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 	setCursorBehaviour((uint8_t) setting, (uint8_t) mask);
 }
 
-// VDU 23, 127, ...
+// VDU 23, 127
 //
 void VDUStreamProcessor::vdu_sys_delete() {
-  
-	debug_log("vdu_sys_delete\n\r");
+	uint8_t packet[] = {
+		0,
+		0,
+		fabgl::VK_SYSREQ,// send key down/up system request for checking progress
+		1,
+	};
+	send_packet(PACKET_KEYCODE, sizeof packet, packet);
+	packet[3] = 0;// key up
+	send_packet(PACKET_KEYCODE, sizeof packet, packet);
+	debug_log("vdu_sys_delete: Acknowledge action ready\n\r");
 }
 
 // VDU 23, c, n1, n2, n3, n4, n5, n6, n7, n8: Redefine a display character
