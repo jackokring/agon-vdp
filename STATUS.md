@@ -32,8 +32,8 @@ The code is well structured, which is good. There is some minor initial confusio
      * I think it might encourage some restriction thinking.
      * Hi Mr. Oric, and wasn't line 25 local "tooltip" on the Oracle's Ceefax?
      Down on the OC Prestel, ancient of terminals?
-   * `$10` (End Box) does alternate forground colour.
-   * `$11` (Start Box) does alternate background colour.
+   * `$10` (End Box) does alternate forground colour (in progress).
+   * `$11` (Start Box) does alternate background colour (in progress).
    * `Mode 135` is 16 colour 256 by 384 modulo mode.
    * Chopping out the unreferenced parts of the font and noticing height is
    less than 500 always seems to save about 1% of the flash space.
@@ -46,6 +46,8 @@ The code is well structured, which is good. There is some minor initial confusio
  ratio applied to the `dest` channel. The source `chan` always runs at the
  programmed frequency note. Applying more than 1 modulator to a channel has
  undefined behaviour.
+ * `VDU 23, 0, &C1, n` altered so maybe one day MOS will send byte $43 as `n`
+ when running binaries for version control. Oh, I can dream. It's my fork.
 
 ## The Emulator VDP
 
