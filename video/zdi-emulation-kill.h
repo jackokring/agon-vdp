@@ -3,6 +3,8 @@
  * Author:          Mario Smit (S0urceror)
 */
 
+//The example KILLS EMULATION FILE
+
 #ifndef ZDI_H
 #define ZDI_H
 
@@ -287,7 +289,8 @@ void ez80_serial_write (const char* szLine) {
 			down,
 		};
 		processor->send_packet(PACKET_KEYCODE, sizeof packet, packet);
-        delayMicroseconds (100);
+        //delayMicroseconds (100);
+        // apparently the emulator does not like delays
 	}
 }
 
@@ -303,7 +306,8 @@ void zdi_start ()
     // TDI - OUTPUT - HIGH
     // TCK - OUTPUT - HIGH
     DIRECT_WRITE_HIGH (tdi_reg,tdi_mask);
-    DIRECT_MODE_OUTPUT (tdi_reg,tdi_mask);
+    return;//emulator killed
+    //DIRECT_MODE_OUTPUT (tdi_reg,tdi_mask);
     DIRECT_WRITE_HIGH (tck_reg,tck_mask);
     // TDI - OUTPUT - LOW
     DIRECT_WRITE_LOW (tdi_reg,tdi_mask);
@@ -330,7 +334,8 @@ void zdi_write_bit (bool bit)
         DIRECT_WRITE_HIGH (tdi_reg,tdi_mask);
     else
         DIRECT_WRITE_LOW (tdi_reg,tdi_mask);
-    DIRECT_MODE_OUTPUT (tdi_reg,tdi_mask);
+    return;//emulator killed
+    //DIRECT_MODE_OUTPUT (tdi_reg,tdi_mask);
     // clock up - triggers EZ80 to read bit
     // TCK - OUTPUT - HIGH
     DIRECT_WRITE_HIGH (tck_reg,tck_mask);
@@ -350,8 +355,9 @@ bool zdi_read_bit ()
     DIRECT_WRITE_LOW (tck_reg,tck_mask);
     // read the bit
     // TDI - INPUT - BIT
-    DIRECT_MODE_INPUT (tdi_reg,tdi_mask);
-    bit = DIRECT_READ (tdi_reg,tdi_mask);
+    return 0;//emulator killed
+    //DIRECT_MODE_INPUT (tdi_reg,tdi_mask);
+    //bit = DIRECT_READ (tdi_reg,tdi_mask);
     // clock high
     // TCK - OUTPUT - HIGH
     DIRECT_WRITE_HIGH (tck_reg,tck_mask);
@@ -402,60 +408,64 @@ byte zdi_read_register (byte regnr)
 
     // TCK: xx^^^^^^^^ xxx___*//^^ ^^^___*//^^ ^^^___*//^^ ^^^___*//^^ ^^\\*__//^^
     // TDI: x^^^\\*___ xxxxxBBBBBB xxxxxBBBBBB xxxxxBBBBBB xxxxxBBBBBB xxxxxBBBBBB
-    noInterrupts();
+    return 0;//emulator killed
+    //noInterrupts();
     zdi_start ();
     zdi_register (regnr,ZDI_READ);
     zdi_separator (1);
     value  = zdi_read ();
     zdi_separator (0);
-    delayMicroseconds (3);
-    interrupts();
+    //delayMicroseconds (3);
+    //interrupts();
     return value;
 }
 void zdi_write_register (byte regnr, byte value)
 {
-    noInterrupts();
+	return;//emulator killed
+    //noInterrupts();
     zdi_start ();
     zdi_register (regnr,ZDI_WRITE);
     zdi_separator (1);
     zdi_write(value);
     zdi_separator (1);
-    delayMicroseconds (3);
-    interrupts();
+    //delayMicroseconds (3);
+    //interrupts();
 }
 
 void zdi_read_registers (byte startregnr, byte count, byte* values)
 {
     byte* ptr = values;
-    noInterrupts();
+    return;//emulator killed
+    //noInterrupts();
     zdi_start ();
     zdi_register (startregnr,ZDI_READ);
     while (count-- > 0)
     {
         zdi_separator (ZDI_CMD_CONTINUE);
-        delayMicroseconds (3);
+        //delayMicroseconds (3);
         *(ptr++)  = zdi_read ();
     }
     zdi_separator (ZDI_CMD_DONE);
-    delayMicroseconds (3);
-    interrupts();
+    //delayMicroseconds (3);
+    //interrupts();
 }
 
 void zdi_write_registers (byte startregnr, byte count, byte* values)
 {
     byte* ptr = values;
-    noInterrupts();
+    return;//emulator killed
+    //noInterrupts();
     zdi_start ();
     zdi_register (startregnr,ZDI_WRITE);
     while (count-- > 0)
     {
         zdi_separator (ZDI_CMD_CONTINUE);
-        delayMicroseconds (3);
+        //delayMicroseconds (3);
         zdi_write (*(ptr++));
     }
     zdi_separator (ZDI_CMD_DONE);
-    delayMicroseconds (3);
-    interrupts();
+    //delayMicroseconds (3);
+    //interrupts();
 }
 
 // high-level debugging, register and memory read functions
@@ -508,12 +518,13 @@ void zdi_read_memory (uint32_t address,uint16_t count, byte* memory)
     for (int i=0;i<count;i++)
     {
         zdi_separator (ZDI_CMD_CONTINUE);
-        delayMicroseconds (3);
+        return;//emulator killed
+        //delayMicroseconds (3);
         *(ptr++) = zdi_read ();
     }
     // done
     zdi_separator (ZDI_CMD_DONE);
-    delayMicroseconds (3);
+    //delayMicroseconds (3);
 }
 void zdi_write_memory (uint32_t address,uint32_t count, byte* memory)
 {
@@ -526,12 +537,13 @@ void zdi_write_memory (uint32_t address,uint32_t count, byte* memory)
     for (uint32_t i=0;i<count;i++)
     {
         zdi_separator (ZDI_CMD_CONTINUE);
-        delayMicroseconds (3);
+        return;//emulator killed
+        //delayMicroseconds (3);
         zdi_write (*(ptr++));
     }
     // done
     zdi_separator (ZDI_CMD_DONE);
-    delayMicroseconds (3);
+    //delayMicroseconds (3);
 }
 void zdi_print_debug_status () 
 {
@@ -631,7 +643,8 @@ void zdi_enter ()
 
     zdi_mode_flag = true;
     DIRECT_WRITE_HIGH (tck_reg,tck_mask);
-    DIRECT_MODE_OUTPUT (tck_reg,tck_mask);
+    return;//emulator killed
+    //DIRECT_MODE_OUTPUT (tck_reg,tck_mask);
     
     // get cpu identification
     uint16_t pid=zdi_get_productid ();
@@ -1054,22 +1067,23 @@ void zdi_cmd_jump ()
 {
     if (charcnt>2)
     {
-        u32_t address=strtoul (szLine+2,NULL,16);
+    	return;//emulator killed
+        //u32_t address=strtoul (szLine+2,NULL,16);
         bool already_breaked = false;
         if (zdi_debug_breakpoint_reached())
             already_breaked = true;
         else
             zdi_debug_break ();
-        zdi_write_cpu (REG_PC,address);
+        //zdi_write_cpu (REG_PC,address);
         // continue if
         if (!already_breaked)
         {
-            hal_hostpc_printf ("\r\n(jumping to 0x%06X)\r\n#",address);
+            //hal_hostpc_printf ("\r\n(jumping to 0x%06X)\r\n#",address);
             zdi_debug_continue();  
         }
         else
         {
-            hal_hostpc_printf ("\r\n(PC set to 0x%06X)\r\n#",address);
+            //hal_hostpc_printf ("\r\n(PC set to 0x%06X)\r\n#",address);
         }
     }
     else
@@ -1095,16 +1109,17 @@ void zdi_cmd_examine_binary ()
         // get requested address + size
         char* pStart = szLine+2;
         char* pSize;
-        u32_t address=strtoul (pStart,&pSize,16);
-        u32_t size=LINE_LENGTH;
-        if (*pSize != '\0')
-            size = strtoul (pSize,NULL,16);
-        u32_t total_size = size;
+        return;//emulator killed
+        //u32_t address=strtoul (pStart,&pSize,16);
+        //u32_t size=LINE_LENGTH;
+        //if (*pSize != '\0')
+            //size = strtoul (pSize,NULL,16);
+        //u32_t total_size = size;
 
         const uint8_t CHUNKSIZE = 30;
         byte* mem = (byte*) malloc (CHUNKSIZE);        
         // retrieve and send binary
-        while (size>0) 
+        /* while (size>0) 
         {
             // how many bytes still to transfer?
             uint8_t chunksize = (size>CHUNKSIZE) ? CHUNKSIZE : size;
@@ -1112,7 +1127,7 @@ void zdi_cmd_examine_binary ()
             if (chunksize>0)
             {
                 memset (mem,0,CHUNKSIZE);
-                zdi_read_memory (address,chunksize,mem);
+                //zdi_read_memory (address,chunksize,mem);
                 DBGSerial.write (chunksize);
                 DBGSerial.write (mem,CHUNKSIZE); // read memory with or without trailing zeroes
                 uint8_t checksum = zdi_checksum_memory (mem,chunksize);
@@ -1149,7 +1164,7 @@ void zdi_cmd_examine_binary ()
                     break;
                 }
             }
-        }
+        } */
         free (mem);
 
         // restore pc
@@ -1160,7 +1175,7 @@ void zdi_cmd_examine_binary ()
             zdi_debug_continue();
 
         // ready prompt
-        hal_hostpc_printf ("\r\n(%ld bytes transferred)\r\n#",total_size);
+        //hal_hostpc_printf ("\r\n(%ld bytes transferred)\r\n#",total_size);
     }
     else
         hal_hostpc_printf ("\r\n(error, no start address)\r\n#");
@@ -1182,15 +1197,15 @@ void zdi_cmd_examine_intelhex ()
         // get requested address + size
         char* pStart = szLine+2;
         char* pSize;
-        u32_t address=strtoul (pStart,&pSize,16);
-        u16_t size=LINE_LENGTH;
-        if (*pSize != '\0')
-            size = strtoul (pSize,NULL,16);
+        //u32_t address=strtoul (pStart,&pSize,16);
+        //u16_t size=LINE_LENGTH;
+        //if (*pSize != '\0')
+            //size = strtoul (pSize,NULL,16);
         // read memory in chunks of LINE_LENGTH
         bool first = true;
         bool last = false;
         uint16_t chunk;
-        while (size>0)
+        /* while (size>0)
         {
             chunk = (size>LINE_LENGTH?LINE_LENGTH:size);
             byte* mem = (byte*) malloc (chunk);
@@ -1205,7 +1220,7 @@ void zdi_cmd_examine_intelhex ()
                 first = false;
                 
             free (mem);
-        }
+        } */
         // restore pc
         zdi_write_cpu (REG_PC, pc);
         // continue if
