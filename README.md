@@ -23,12 +23,12 @@ In the Additional Board Manager URLs text box, enter the following URL:
 
 `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
 
-In the Board Manager (from the Tools menu), select the esp32 board, making sure version 2.0.4 is installed.
+In the Board Manager (from the Tools menu), select the esp32 board. Advice for the original Quark firmware was to make sure version 2.0.4 is installed, however for the Agon Console8 development has been conducted with version 2.0.11.
 
 Now the board can be selected and configured:
 
 * Board: “ESP32 Dev Module”
-* Upload Speed: “921600”
+* Upload Speed: "115200"
 * CPU Frequency: “240Mhz (WiFi/BT)”
 * Flash Frequency: “80Mhz”
 * Flash Mode: “QIO”
@@ -41,17 +41,19 @@ Bernado writes:
 
 > Although I am using 4MB for the PSRAM coupled to the ESP32 (the FabGL assumption), that memory actually has 8MB, so if you find a way to use the extra 4MB, please change the configuration to 8MB.
 
+(Accessing the upper 4MB of PSRAM requires a different method of memory access, making use of the [Himem Allocation API](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/himem.html).  This is not currently used in the underlying fag-gl/vdp-gl library and not used in any other VDP code, but may be in the future.)
+
 And for the Port, you will need to determine the Com port that the Agon Light is assigned from your OS after it is connected.
 
 Now the third party libraries will need to be installed from the Library Manager in the Tools menu
 
 * vdp-gl version 1.0.3 (Official fork of FabGL 1.0.8 for Agon)
-* ESP32Time version 2.0.0
+* ESP32Time version 2.0.4
 
-It is important you use these exact versions otherwise I cannot guarantee the code will compile or run correctly.
+Original Quark firmware advice was to use ESP32Time version 2.0.0, however for the Agon Console8 development has been conducted with version 2.0.4.  There are no guarantees that the code will work correctly with other versions, however if the major version number matches it is likely that it will.
 
 NB:
 
 - If you have previously installed FabGL as a third-party library in the Arduino IDE, please remove it before installing vdp-gl.
 - If you are using version 2.0.x of the IDE and get the following message during the upload stage: `ModuleNotFoundError: No module named 'serial'` then you will need to install the python3-serial package.
-- If you are using an Apple Mac with an M chipset and are having difficulties uploading to the Agon, try changing the upload speed from 921600 to 115200 - some users have reported that works.
+- It may be possible to communicate with your Agon at higher speeds than 115200, but this is the speed that has been tested and is known to work for Agon Console8 development on a MacBook Pro with an M1Max CPU.  There is no harm in trying higher speeds.

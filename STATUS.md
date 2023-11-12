@@ -7,6 +7,8 @@ the same then there should be no problems flashing.
 ## Arduino IDE Loads and All is Well (v6.66 is as good a number as any)
 
 The code is well structured, which is good. There is some minor initial confusion.
+**The Console8 esp32 2.0.11 board files, vdp-gl 1.0.3 and ESP32Time 2.0.4** are
+used.
 
  * `FX` for doing things MOS side. Pun not intended. Best left alone for now.
  Many of these "settings" have architecture specifics.
