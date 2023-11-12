@@ -1,6 +1,6 @@
 # Modding Status
 
-The developmnet kit works on Arduino and so `linux-arm64` is fine for development.
+The development kit works on Arduino and so `linux-arm64` is fine for development.
 My understanding is that if the MOS is not altered, and the "data tx/rx" remains
 the same then there should be no problems flashing.
 
@@ -21,7 +21,7 @@ used.
    * 3 print off.
    * 6 enable screen. Opposite of 6.
    * **27** send next literal less than 32 to screen.
-     * I've requesitioned this one.
+     * I've requisitioned this one.
    * 23 is heavily overloaded on the following byte values below 32 as they
    have no UDG.
      * **127** is also not a real UDG, but is likely a font glyph (unprinted),
@@ -37,7 +37,7 @@ used.
      * Hi Mr. Oric, and wasn't line 25 local "tooltip" on the Oracle's Ceefax?
      Down on the OC Prestel, ancient of terminals?
    * Alternate colour palette as it's a 16 colour mode really.
-     * `138` (End Box) does alternate forground colour.
+     * `138` (End Box) does alternate foreground colour.
      * `139` (Start Box) does alternate background colour from foreground.
    * `Mode 135` is 16 colour 256 by 384 modulo mode.
    * Chopping out the unreferenced parts of the font and noticing height is
@@ -79,7 +79,7 @@ Fix some more of those hindsight obvious logic bugs. Such as `0*x=0` in the
 area of a bitmap (load bytes), and keycode up return (with held rollover).
 
 It needs more thought, and integration of commits from "Official" and
-"Cosole8" streams. The `vdp-gl` is also growing a little, and also it should
+"Console8" streams. The `vdp-gl` is also growing a little, and also it should
 build against the emulator target.
 
 Reducing some of the compile "purple zone" should also be a goal.

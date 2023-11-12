@@ -571,7 +571,7 @@ int8_t change_mode(uint8_t mode) {
 	    	if (errVal == 0) {
 	      		errVal = ttxt_instance.init();
 	    		if (errVal == 0) ttxtMode = true; 
-	    		// exit ttext allocation by reset?
+	    		// exit ttxt allocation by reset?
 	    	}
 	    	break;
 		case 8:
