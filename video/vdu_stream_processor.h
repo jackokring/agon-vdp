@@ -297,6 +297,7 @@ void VDUStreamProcessor::processAllAvailable() {
 uint8_t VDUStreamProcessor::processNext() {
 	uint8_t c = readByte();//available checked in video.ino
 	vdu(c);
+	return c;//helps :D
 }
 
 #include "vdu.h"
