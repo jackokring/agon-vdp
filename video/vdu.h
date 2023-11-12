@@ -25,13 +25,7 @@ uint8_t * free8() {
 //
 void VDUStreamProcessor::vdu(uint8_t c) {
 
-	// We want to send raw chars back to the debugger
-	// this allows binary (faster) data transfer in ZDI mode
-	// to inspect memory and register values
-	//
-	if(consoleMode) {
-		DBGSerial.write (c);
-	}
+	// Moved to video.ino
 	
 	// VDU 23, 0, &FE, 0 possible here? to clear consoleMode.
 	

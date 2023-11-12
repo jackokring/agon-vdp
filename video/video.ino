@@ -123,7 +123,16 @@ void loop() {
 				drawCursor = false;
 				do_cursor();
 			}
-			processor->processNext();
+			uint8_t c = processor->processNext();
+			// lifted from vdu.h
+			
+			// We want to send raw chars back to the debugger
+			// this allows binary (faster) data transfer in ZDI mode
+			// to inspect memory and register values
+			//
+			if(consoleMode) {
+				DBGSerial.write (c);
+			}
 		}
 	}
 }

@@ -118,7 +118,7 @@ class VDUStreamProcessor {
 		void sendMouseData(MouseDelta * delta);
 
 		void processAllAvailable();
-		void processNext();
+		uint8_t processNext();
 
 		void vdu(uint8_t c);
 
@@ -294,10 +294,9 @@ void VDUStreamProcessor::processAllAvailable() {
 
 // Process next command from the stream
 //
-void VDUStreamProcessor::processNext() {
-	if (byteAvailable()) {
-		vdu(readByte());
-	}
+uint8_t VDUStreamProcessor::processNext() {
+	uint8_t c = readByte();//available checked in video.ino
+	vdu(c);
 }
 
 #include "vdu.h"
