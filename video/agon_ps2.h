@@ -24,9 +24,14 @@ uint32_t		mWheelAcc = MOUSE_DEFAULT_WHEELACC;	// Mouse wheel acceleration
 
 // Forward declarations
 //
+
+#define EMULATED
+
+#ifndef EMULATED
 bool zdi_mode ();
 void zdi_enter ();
 void zdi_process_cmd (uint8_t key);
+#endif
 
 // Get keyboard instance
 //
@@ -78,7 +83,8 @@ bool getKeyboardKey(uint8_t *keycode, uint8_t *modifiers, uint8_t *vk, uint8_t *
 
 	if(consoleMode) {
 		if (DBGSerial.available()) {
-			_keycode = DBGSerial.read();			
+			_keycode = DBGSerial.read();	
+#ifndef EMULATED		
 			if(!zdi_mode()) {
 				if(_keycode == 0x1A) {
 					zdi_enter();
@@ -90,6 +96,7 @@ bool getKeyboardKey(uint8_t *keycode, uint8_t *modifiers, uint8_t *vk, uint8_t *
 				return false;
 
 			}
+#endif
 			*keycode = _keycode;
 			*modifiers = 0;
 			*vk = 0;
