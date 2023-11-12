@@ -121,14 +121,10 @@ void agon_ttxt::display_char(int col, int row, unsigned char c)
 
 // Codes 128, +0, 14, 15, 16, 27 technically free codes.
 uint8_t invert_colour(RGB888 * colour) {
-  for(int i = 0; i < 64; i++) {
-  	if(*colour == colourLookup[i]) {// 1 of 64
+  for(int i = 0; i < 16; i++) {
+  	if(*colour == colourLookup[defaultPalette10[i]]) {// 1 of 16
   		// set backgroung immediate
-  		for(int j = 0; j < 16; j++) {
-  			if(defaultPalette10[j] == i) {
-  				return defaultPalette10[(j + 8) & 0x0F];// a pattern of first 16? 
-  			}
-  		}
+		return defaultPalette10[(i + 8) & 0x0F];// a pattern of first 16? 
   	}
   }
   return COLOUR_BLACK;//a default never used
