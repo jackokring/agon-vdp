@@ -670,7 +670,7 @@ int8_t change_mode(uint8_t mode) {
 	switch (getVGAColourDepth()) {
 		case  2: resetPalette(defaultPalette02); break;
 		case  4: resetPalette(defaultPalette04); break;
-		case  8: resetPalette(defaultPalette08); break;
+		//case  8: resetPalette(defaultPalette08); break;
 		case 16: resetPalette(defaultPalette10); break;
 		case 64: resetPalette(defaultPalette40); break;
 	}

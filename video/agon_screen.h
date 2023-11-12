@@ -19,7 +19,7 @@ std::unique_ptr<fabgl::VGABaseController> getVGAController(uint8_t colours) {
 	switch (colours) {
 		case  2: return std::move(std::unique_ptr<fabgl::VGA2Controller>(new fabgl::VGA2Controller()));
 		case  4: return std::move(std::unique_ptr<fabgl::VGA4Controller>(new fabgl::VGA4Controller()));
-		case  8: return std::move(std::unique_ptr<fabgl::VGA8Controller>(new fabgl::VGA8Controller()));
+		//case  8: return std::move(std::unique_ptr<fabgl::VGA8Controller>(new fabgl::VGA8Controller()));
 		case 16: return std::move(std::unique_ptr<fabgl::VGA16Controller>(new fabgl::VGA16Controller()));
 		case 64: return std::move(std::unique_ptr<fabgl::VGAController>(new fabgl::VGAController()));
 	}
@@ -33,7 +33,7 @@ void updateRGB2PaletteLUT() {
 	switch (_VGAColourDepth) {
 		case 2: fabgl::VGA2Controller::instance()->updateRGB2PaletteLUT(); break;
 		case 4: fabgl::VGA4Controller::instance()->updateRGB2PaletteLUT(); break;
-		case 8: fabgl::VGA8Controller::instance()->updateRGB2PaletteLUT(); break;
+		//case 8: fabgl::VGA8Controller::instance()->updateRGB2PaletteLUT(); break;
 		case 16: fabgl::VGA16Controller::instance()->updateRGB2PaletteLUT(); break;
 	}
 }
@@ -56,7 +56,7 @@ void setPaletteItem(uint8_t l, RGB888 c) {
 		switch (depth) {
 			case 2: fabgl::VGA2Controller::instance()->setPaletteItem(l, c); break;
 			case 4: fabgl::VGA4Controller::instance()->setPaletteItem(l, c); break;
-			case 8: fabgl::VGA8Controller::instance()->setPaletteItem(l, c); break;
+			//case 8: fabgl::VGA8Controller::instance()->setPaletteItem(l, c); break;
 			case 16: fabgl::VGA16Controller::instance()->setPaletteItem(l, c); break;
 		}
 	}

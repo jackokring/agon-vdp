@@ -23,7 +23,7 @@ static const uint8_t defaultPalette04[0x04] = {
 	0x3C,	// Bright Yellow
 	0x3F,	// Bright White
 };
-static const uint8_t defaultPalette08[0x08] = {
+/* static const uint8_t defaultPalette08[0x08] = {
 	0x00,	// Black
 	0x30,	// Bright Red
 	0x0C,	// Bright Green
@@ -32,7 +32,7 @@ static const uint8_t defaultPalette08[0x08] = {
 	0x33,	// Bright Magenta
 	0x0F,	// Bright Cyan
 	0x3F,	// Bright White
-};
+}; */
 static const uint8_t defaultPalette10[0x10] = {
 	0x00, 0x20, 0x08, 0x28, 0x02, 0x22, 0x0A, 0x2A,	// As above, but dark
 	0x15, 0x30, 0x0C, 0x3C, 0x03, 0x33, 0x0F, 0x3F,	// As above, but bright
