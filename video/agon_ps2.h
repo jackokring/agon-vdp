@@ -25,8 +25,6 @@ uint32_t		mWheelAcc = MOUSE_DEFAULT_WHEELACC;	// Mouse wheel acceleration
 // Forward declarations
 //
 
-#define EMULATED
-
 #ifndef EMULATED
 bool zdi_mode ();
 void zdi_enter ();
