@@ -94,7 +94,7 @@ void VDUStreamProcessor::vdu_sys() {
 			case 0x1C: {					// VDU 23, 28
 				vdu_sys_hexload();
 			}	break;
-			case 0x7F: {          // VDU 23, 127, ...
+			case 0x7F: {          // VDU 23, 127 = ACK SYNC
 				vdu_sys_delete();
 			} break;
 		}

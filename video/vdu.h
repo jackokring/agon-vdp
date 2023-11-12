@@ -33,6 +33,8 @@ void VDUStreamProcessor::vdu(uint8_t c) {
 		DBGSerial.write (c);
 	}
 	
+	// VDU 23, 0, &FE, 0 possible here? to clear consoleMode.
+	
 	switch(c) {
 		case 0x04:	
 			// enable text cursor
