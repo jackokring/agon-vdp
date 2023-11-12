@@ -97,33 +97,32 @@ void setup() {
 // The main loop
 //
 void loop() {
-	uint32_t count = 0;						// Generic counter, incremented every loop iteration
-	bool cursorVisible = false;
-	bool cursorState = false;
+	bool drawCursor = false;
+	auto cursorTime = millis();
 
 	while (true) {
 		if (terminalMode) {
 			do_keyboard_terminal();
 			continue;
 		}
-		cursorVisible = ((count & 0xFFFF) == 0);
-		if (cursorVisible) {
-    		if (!cursorState && ttxtMode) ttxt_instance.flash(true);
-			cursorState = !cursorState;
+		if (millis() - cursorTime > CURSOR_PHASE) {
+			cursorTime = millis();
+			drawCursor = !drawCursor;
+			if (ttxtMode) {
+				ttxt_instance.flash(drawCursor);
+			}
 			do_cursor();
-      		if (!cursorState && ttxtMode) ttxt_instance.flash(false);
 		}
 		do_keyboard();
 		do_mouse();
 
 		if (processor->byteAvailable()) {
-			if (cursorState) {
-				cursorState = false;
+			if (drawCursor) {
+				drawCursor = false;
 				do_cursor();
 			}
 			processor->processNext();
 		}
-		count++;
 	}
 }
 
