@@ -1,17 +1,19 @@
 # Modding Status
 
 The development kit works on Arduino and so `linux-arm64` is fine for development.
-My understanding is that if the MOS is not altered, and the "data tx/rx" remains
-the same then there should be no problems flashing.
+My understanding is that if the MOS is not altered, and the "VDP data protocol" remains
+the same then there should be no problems flashing this VDP.
 
 ## Arduino IDE Loads and All is Well (v6.66 is as good a number as any)
 
-The code is well structured, which is good. There is some minor initial confusion.
-**The Console8 esp32 2.0.11 board files, vdp-gl 1.0.3 and ESP32Time 2.0.4** are
-used.
+The code is well structured, which is good.
 
- * `FX` for doing things MOS side. Pun not intended. Best left alone for now.
- Many of these "settings" have architecture specifics.
+ * esp32 2.0.11 board files
+ * vdp-gl 1.0.3
+ * ESP32Time 2.0.4
+
+are used. This may change later (check `platformio.ini` for dependancies).
+
  * `VDU` basically a character echo with control sequences running on the VDP. 
  Some `VDU` initial control codes have no implemented meaning.
    * **0** nothing. So should remain fixed.
@@ -36,13 +38,13 @@ used.
      * I think it might encourage some restriction thinking.
      * Hi Mr. Oric, and wasn't line 25 local "tooltip" on the Oracle's Ceefax?
      Down on the OC Prestel, ancient of terminals?
-   * Alternate colour palette as it's a 16 colour mode really.
-     * `138` (End Box) does alternate foreground colour.
-     * `139` (Start Box) does alternate background colour from foreground.
-   * `Mode 135` is 16 colour 256 by 384 modulo mode.
    * Chopping out the unreferenced parts of the font and noticing height is
    less than 500 always seems to save about 1% of the flash space.
    This might be useful later with trimming the 20th row and `<WiFi.h>`.
+   * Alternate colour palette as it's a 16 colour mode really.
+     * `138` (End Box) does alternate foreground colour.
+     * `139` (Start Box) does alternate background colour from foreground.
+ * `Mode 135` is 16 colour 256 by 384 modulo mode. Double height Speccy mode.
  * `Audio` yes, `VDU 23, 0, &85, chan, 13, wave, (sampId;) dest_chan, mul-1, div-1`
  performs FM modulation of `dest_chan` by `chan`. The destination frequency value
  becomes non-functional while a modulator is enabled. Change the volume of
@@ -64,6 +66,20 @@ placed atop a copy of the quark104. Or after some VDP `Makefile` edits.
 
 `./fab-agon-emulator --vdp ./src/vdp/vdp_quark666.so`
 
+The emulator throws a segmentation fault panic when closed. This happens late
+in the shutdown phase, after most of the threads have finished. This is
+likely related to closing and unloading the dynamic library.
+
+The repository builds with `PlatformIO` using VSCode. `//#define EMULATED` in
+`agon.h` is required if you want all the hardware features including ones
+not currently supported in the emulator.
+
+[The Emulator Fork](https://github.com/jackokring/fab-agon-emulator/tree/main)
+contains all the alternate repositories I'm using as git submodules. This
+makes it easy to navigate the SD Card image used, along with any other
+Agon projects. By default it's running the most upto date Console8
+firmware (with minor not emulated fixes).
+
 ## Ideas Going Forward
 
 So yes the `Terminal Mode` has quite extensive VT emulation. In a lot of ways
@@ -76,7 +92,7 @@ Maybe look over the bitmap and sprite code, but it is in flux. Extend the mode
 effective audio options.
 
 Fix some more of those hindsight obvious logic bugs. Such as `0*x=0` in the
-area of a bitmap (load bytes), and keycode up return (with held rollover).
+area of a bitmap (load bytes `&&`->`||`), and keycode up return (with held rollover).
 
 It needs more thought, and integration of commits from "Official" and
 "Console8" streams. The `vdp-gl` is also growing a little, and also it should

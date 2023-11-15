@@ -9,17 +9,13 @@ fix tests of any found bugs.
 
 The AGON documentation can now be found on the [Agon Light Documentation Wiki](https://github.com/breakintoprogram/agon-docs/wiki)
 
-### Building
-
-The ESP32 is programmed via the USB connector at the top of the board using the Arduino IDE. It has been tested on version 1.8.19 and the latest 2.0.4.
-
 #### PlatformIO VSCode/Linux (Debian)
 
-You will need to `sudo apt install python3-pip python3-dev` to get python up before adding the VSCode plugin for `PlatformIO`. When building you will get a warning about changed core default setting. Just open the repository root as a
-folder. The `cspell` plugin was also used. If your system is small, then avoid installing the recommended `C/C++` plugin
-as the built in C/C++ tool is good enough (for this project) and uses much less resources.
+You will need to `sudo apt install python3-pip python3-dev` to get python up before adding the VSCode plugin for `PlatformIO`. When building you will get a warning about changed core default setting. Just open the repository root as a folder. The `cspell` plugin was also used. If your system is small, then avoid installing the recommended `C/C++` plugin
+as the built in C/C++ tool is good enough (for this project) and uses much less resources. Remember it comment out `//#define EMULATED` in `agon.h` if you are building for hardware
+and not the `fab-agon-emulator`. This will enable all features that are not yet supported in the emulator.
 
-#### Arduino IDE settings
+#### Arduino IDE settings (Not Used for Building `firmware.bin`)
 
 In order to add the ESP32 as a supported board in the Arduino IDE, you will need to add in this URL into the board manager:
 
