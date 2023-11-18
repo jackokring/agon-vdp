@@ -509,6 +509,8 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 void VDUStreamProcessor::vdu_sys_rekey() {
 #ifdef EMULATED
 	auto code = readByte_t();	if (code == -1) return;
+	// might cause out of bounds violation otherwise
+	if(code >= fabgl::VK_ASCII) return;
 	auto value = getKeyboard()->map((VirtualKey)code);
 	uint8_t packet[] = {
 		0,
