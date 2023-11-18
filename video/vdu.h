@@ -30,6 +30,15 @@ void VDUStreamProcessor::vdu(uint8_t c) {
 	// VDU 23, 0, &FE, 0 possible here? to clear consoleMode.
 	
 	switch(c) {
+		case 0x00:
+			// correct NUL behaviour
+			break;
+		case 0x01:	// Next char printer only?
+			break;
+		case 0x02:	// Printer on?
+			break;
+		case 0x03:	// Printer off?
+			break;
 		case 0x04:	
 			// enable text cursor
 			setCharacterOverwrite(true);
@@ -41,6 +50,8 @@ void VDUStreamProcessor::vdu(uint8_t c) {
 			setCharacterOverwrite(false);
 			setActiveCursor(getGraphicsCursor());
 			setActiveViewport(VIEWPORT_GRAPHICS);
+			break;
+		case 0x06:	// Enable screen?
 			break;
 		case 0x07:	// Bell
 			play_note(0, 100, 750, 125);
@@ -80,6 +91,10 @@ void VDUStreamProcessor::vdu(uint8_t c) {
 			break;
 		case 0x13:	// Define Logical Colour
 			vdu_palette();
+			break;
+		case 0x14:	// Restore Colours?
+			break;
+		case 0x15:	// Disable screen?
 			break;
 		case 0x16:  // Mode
 			vdu_mode();

@@ -82,19 +82,97 @@ void VDUStreamProcessor::vdu_sys() {
 					enableCursor((bool) b);
 				}
 			}	break;
+			case 0x02: {					// VDU 23, 2
+			 
+			}	break;
+			case 0x03: {					// VDU 23, 3
+			 
+			}	break;
+			case 0x04: {					// VDU 23, 4
+			 
+			}	break;
+			case 0x05: {					// VDU 23, 5
+			 
+			}	break;
+			case 0x06: {					// VDU 23, 6
+			 
+			}	break;
 			case 0x07: {					// VDU 23, 7
 				vdu_sys_scroll();			// Scroll 
 			}	break;
+			case 0x08: {					// VDU 23, 8
+			 
+			}	break;
+			case 0x09: {					// VDU 23, 9
+			 
+			}	break;
+			case 0x0A: {					// VDU 23, 10
+			 
+			}	break;
+			case 0x0B: {					// VDU 23, 11
+			 
+			}	break;
+			case 0x0C: {					// VDU 23, 12
+			 
+			}	break;
+			case 0x0D: {					// VDU 23, 13
+			 
+			}	break;
+			case 0x0E: {					// VDU 23, 14
+			 
+			}	break;
+			case 0x0F: {					// VDU 23, 15
+			 
+			}	break;
 			case 0x10: {					// VDU 23, 16
 				vdu_sys_cursorBehaviour();	// Set cursor behaviour
+			}	break;
+			case 0x11: {					// VDU 23, 17
+			 
+			}	break;
+			case 0x12: {					// VDU 23, 18
+			 
+			}	break;
+			case 0x13: {					// VDU 23, 19
+			 
+			}	break;
+			case 0x14: {					// VDU 23, 20
+			 
+			}	break;
+			case 0x15: {					// VDU 23, 21
+			 
+			}	break;
+			case 0x16: {					// VDU 23, 22
+			 
+			}	break;
+			case 0x17: {					// VDU 23, 23
+			 
+			}	break;
+			case 0x18: {					// VDU 23, 24
+			 
+			}	break;
+			case 0x19: {					// VDU 23, 25
+			 
+			}	break;
+			case 0x1A: {					// VDU 23, 26
+			 
 			}	break;
 			case 0x1B: {					// VDU 23, 27
 				vdu_sys_sprites();			// Sprite system control
 			}	break;
 			case 0x1C: {					// VDU 23, 28
-				vdu_sys_hexload();
+				vdu_sys_hexload();			// hexloader
 			}	break;
-			case 0x7F: {          // VDU 23, 127 = ACK SYNC
+			case 0x1D: {					// VDU 23, 29
+			 
+			}	break;
+			case 0x1E: {					// VDU 23, 30
+			 
+			}	break;
+			case 0x1F: {					// VDU 23, 31
+			 
+			}	break;
+			case 0x7F: {          // VDU 23, 127 = ACK SYNC VK_SYSREQ
 				vdu_sys_delete();
 			} break;
 		}
