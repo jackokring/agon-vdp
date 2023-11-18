@@ -94,6 +94,9 @@ void VDUStreamProcessor::vdu_sys() {
 			case 0x1C: {					// VDU 23, 28
 				vdu_sys_hexload();
 			}	break;
+			case 0x1F: {					// VDU 23, 31
+				vdu_sys_rekey();
+			}	break;
 			case 0x7F: {          // VDU 23, 127 = ACK SYNC
 				vdu_sys_delete();
 			} break;
@@ -499,6 +502,23 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 	auto mask = readByte_t();		if (mask == -1) return;
 
 	setCursorBehaviour((uint8_t) setting, (uint8_t) mask);
+}
+
+// VDU 23, 31, keycode
+//
+void VDUStreamProcessor::vdu_sys_rekey() {
+#ifdef EMULATED
+	auto code = readByte_t();	if (code == -1) return;
+	auto value = getKeyboard()->map((VirtualKey)code);
+	uint8_t packet[] = {
+		0,
+		0,
+		code,// send key down or up
+		value,
+	};
+	send_packet(PACKET_KEYCODE, sizeof packet, packet);
+#endif
+	debug_log("vdu_sys_rekey: check key state\n\r");
 }
 
 // VDU 23, 127

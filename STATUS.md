@@ -21,7 +21,7 @@ are used. This may change later (check `platformio.ini` for dependancies).
      * So what is a "printer" in context of WWW and WiFi? 
    * 2 print on.
    * 3 print off.
-   * 6 enable screen. Opposite of 6.
+   * 6 enable screen. Opposite of 1.
    * **27** send next literal less than 32 to screen.
      * I've requisitioned this one.
    * 23 is heavily overloaded on the following byte values below 32 as they
@@ -33,6 +33,8 @@ are used. This may change later (check `platformio.ini` for dependancies).
      ensures previous VDP to CPU packets have been processed. Doesn't need a
      MOS expansion of the VDP protocol. Max key velocity should make this
      unique, and selling excess keyboard plastic is cool man.
+     * **31** for `rekey` as `VDU 23, 31, vk_keycode` to resend up or down
+     state. So obtaining currently pressed. Needs `vdp-gl` mod.
  * `Mode 7` codes 128+ (0, 14, 15, 16, 27) technically free control codes.
    * Apparently I've done 24 instead of 25 lines.
      * I think it might encourage some restriction thinking.
