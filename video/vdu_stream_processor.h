@@ -93,7 +93,6 @@ class VDUStreamProcessor {
     // Added S. Jackson
     void vdu_sys_delete(); // in vdu_sys.h VDU 23, 127   (sends VK_SYSREQ)
     void vdu_escape();     // in vdu.h     VDU 27
-    void vdu_sys_rekey();  // in vdu_sys.h VDU 23, 31, keycode
 
 	public:
 		uint16_t id = 65535;
