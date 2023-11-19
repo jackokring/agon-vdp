@@ -253,3 +253,9 @@ void debug_log(const char *format, ...);
 #ifndef VGA_640x240_60Hz
 #define VGA_640x240_60Hz	"\"640x240@60Hz\" 25.175 640 656 752 800 240 245 246 262 -HSync -VSync DoubleScan"
 #endif
+#ifndef VGA_256x384_60Hz
+// A possible extra mode 256*x modulo mode
+// from a fabglconf.h
+#define VGA_256x384_60Hz	"\"256x384@60\" 17.09 256 272 304 352 384 387 391 404 -HSync -VSync DoubleScan"
+// old mode 1 should use same memory max
+#endif

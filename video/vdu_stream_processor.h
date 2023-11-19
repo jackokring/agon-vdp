@@ -90,10 +90,6 @@ class VDUStreamProcessor {
 		void receiveFirmware();
 		void switchFirmware();
 
-    // Added S. Jackson
-    void vdu_sys_delete(); // in vdu_sys.h VDU 23, 127   (sends VK_SYSREQ)
-    void vdu_escape();     // in vdu.h     VDU 27
-
 	public:
 		uint16_t id = 65535;
 
@@ -118,12 +114,15 @@ class VDUStreamProcessor {
 		void sendMouseData(MouseDelta * delta);
 
 		void processAllAvailable();
-		uint8_t processNext();
+		uint8_t processNext();//return next for DBGSerial in video.ino
 
 		void vdu(uint8_t c);
 
 		void wait_eZ80();
 		void sendModeInformation();
+		// Added S. Jackson
+	    void vdu_sys_delete(); // in vdu_sys.h VDU 23, 127   (sends VK_SYSREQ)
+    	void vdu_escape();     // in vdu.h     VDU 27
 };
 
 // Read an unsigned byte from the serial port, with a timeout

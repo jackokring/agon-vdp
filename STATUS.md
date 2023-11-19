@@ -24,7 +24,9 @@ are used. This may change later (check `platformio.ini` for dependancies).
    * 6 enable screen. Opposite of 21.
    * **27** send next literal less than 32 to screen.
      * I've requisitioned this one.
-   * 23 is heavily overloaded on the following byte values below 32 as they
+   * 20 restore colours.
+   * 21 disable screen.
+   * 23 is heavily overloaded on the byte values below 32 as they
    have no UDG.
      * **127** is also not a real UDG, but is likely a font glyph (unprinted),
      given that bitmaps are rectangular. This is perhaps the ideal intercept.
