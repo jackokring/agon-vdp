@@ -5,6 +5,12 @@ This fork is to test ideas, and make a firmware for me. It will be updated with
 most, if not all upstream official things, but might contain experiments and
 fix tests of any found bugs.
 
+  * WANSI Terminal Mode
+  * Can Print ©
+  * Audio Rate FM Modulators
+  * Double Height Double Buffer Speccy Mode
+  * Mode 7, 24 Line Big Font and 16 Colour Codes
+
 ### Documentation
 
 The AGON documentation can now be found on the [Agon Light Documentation Wiki](https://github.com/breakintoprogram/agon-docs/wiki)

@@ -63,6 +63,8 @@ HardwareSerial	DBGSerial(0);
 
 bool			terminalMode = false;			// Terminal mode (for CP/M)
 bool			consoleMode = false;			// Serial console mode (0 = off, 1 = console enabled)
+bool			wansiMode = false;				// Serial wansi mode (0 = off, 1 = console enabled)
+// WANSI mode, is like Terminal, but maintains key input via packets and intercepts VDU 23 for commands
 
 #include "agon.h"								// Configuration file
 #include "agon_ps2.h"							// Keyboard support
@@ -103,6 +105,12 @@ void loop() {
 	auto cursorTime = millis();
 
 	while (true) {
+#ifdef EMULATED
+		// thread pause delay perhaps to free locks on close?
+		uint32_t count = 0;
+	 	if ((count & 0x7f) == 0) delay(1 /* -TM- ms */);
+ 		count++;
+#endif
 		if (terminalMode) {
 			do_keyboard_terminal();
 			continue;
@@ -167,15 +175,30 @@ void do_keyboard() {
 // 
 void do_keyboard_terminal() {
 	uint8_t ascii;
-	if (getKeyboardKey(&ascii)) {
-		// send raw byte straight to z80
-		processor->writeByte(ascii);
-	}
+	if(wansiMode) {
+		do_keyboard();//regular keyboard
+		// Write anything read from z80 to the screen
+		//
+		while (processor->byteAvailable()) {
+			uint8_t c = processor->readByte();
+			if(c == 23) {
+				// ETB - ^W
+				processor->vdu_sys();
+			} else {
+				Terminal.write(c);
+			}
+		}
+	} else {
+		if (getKeyboardKey(&ascii)) {
+			// send raw byte straight to z80
+			processor->writeByte(ascii);
+		}
 
-	// Write anything read from z80 to the screen
-	//
-	while (processor->byteAvailable()) {
-		Terminal.write(processor->readByte());
+		// Write anything read from z80 to the screen
+		//
+		while (processor->byteAvailable()) {
+			Terminal.write(processor->readByte());
+		}
 	}
 }
 
@@ -238,6 +261,21 @@ void switchTerminalMode() {
 	Terminal.connectSerialPort(VDPSerial);
 	Terminal.enableCursor(true);
 	terminalMode = true;
+}
+
+// Set wansi mode
+// Parameters:
+// - mode: 0 = off, 1 = on
+//
+void setWansiMode(bool mode) {
+	wansiMode = mode;
+	if(mode) switchTerminalMode();
+	else {
+		terminalMode = false;
+		Terminal.end();
+		cls(true);
+		canvas.reset();
+	}
 }
 
 void print(char const * text) {

@@ -26,15 +26,18 @@ are used. This may change later (check `platformio.ini` for dependancies).
      * I've requisitioned this one.
    * 20 restore colours.
    * 21 disable screen.
-   * 23 is heavily overloaded on the byte values below 32 as they
+   * **23** is heavily overloaded on the byte values below 32 as they
    have no UDG.
      * **127** is also not a real UDG, but is likely a font glyph (unprinted),
      given that bitmaps are rectangular. This is perhaps the ideal intercept.
-     The `VDU 23, 127` delivers as `VK_SYSREQ` key down/up event pair for
-     synchronization. The sequential processing of reply packets
-     ensures previous VDP to CPU packets have been processed. Doesn't need a
-     MOS expansion of the VDP protocol. Max key velocity should make this
-     unique, and selling excess keyboard plastic is cool man.
+     The `VDU 23, 127` delivers the © symbol. Ironic in that it is impossible
+     to place in code without printing it by a numeric VDU.
+     * **0, $FD** so `VDU 23, 0, $FD, n` enters or exits the `WANSI` terminal
+     mode. This is a mode where keycodes are processed normally so no key
+     driver is needed. There is an intercept on `^W` ASCII `ETB` to get
+     `VDU 23, ...` working. Being terminal though no attempt is made to
+     synchronize the VDP cursor with the terminal cursor. By default
+     the terminal is about a `VT100`.
  * `Mode 7` codes 128+ (0, 14, 15, 16, 27) technically free control codes.
    * Apparently I've done 24 instead of 25 lines.
      * I think it might encourage some restriction thinking.
@@ -55,8 +58,8 @@ are used. This may change later (check `platformio.ini` for dependancies).
  ratio applied to the `dest` channel. The source `chan` always runs at the
  programmed frequency note. Applying more than 1 modulator to a channel has
  undefined behaviour.
- * `VDU 23, 0, &C1, n` altered so maybe one day MOS will send byte $43 as `n`
- when running binaries for version control. Oh, I can dream. It's my fork.
+ * `VDU 23, 0, &C1, n` altered so maybe one day MOS will send byte `$040043` as
+ `n` when running binaries for version control. Oh, I can dream. It's my fork.
  I checked, MOS maybe thinks it's a string NUL terminal.
  * `#define EMULATED` in `agon.h` for emulator skip `#ifndef`.
  * `-emulation-kill` file suffix for compile for emulator "red zone".

@@ -30,107 +30,107 @@ void VDUStreamProcessor::vdu(uint8_t c) {
 	// VDU 23, 0, &FE, 0 possible here? to clear consoleMode.
 	
 	switch(c) {
-		case 0x00:
-			// correct NUL behaviour
+		case 0x00:	// NUL correct NUL behaviour
 			break;
-		case 0x01:	// Next char printer only?
+		case 0x01:	// SOH Next char printer only?
 			break;
-		case 0x02:	// Printer on?
+		case 0x02:	// STX Printer on?
 			break;
-		case 0x03:	// Printer off?
+		case 0x03:	// ETX Printer off?
 			break;
-		case 0x04:	
+		case 0x04:	// EOT
 			// enable text cursor
 			setCharacterOverwrite(true);
 			setActiveCursor(getTextCursor());
 			setActiveViewport(VIEWPORT_TEXT);
 			break;
-		case 0x05:
+		case 0x05:	// ENQ
 			// enable graphics cursor
 			setCharacterOverwrite(false);
 			setActiveCursor(getGraphicsCursor());
 			setActiveViewport(VIEWPORT_GRAPHICS);
 			break;
-		case 0x06:	// Enable screen?
+		case 0x06:	// ACK Enable screen?
 			break;
-		case 0x07:	// Bell
+		case 0x07:	// BEL Bell
 			play_note(0, 100, 750, 125);
 			break;
-		case 0x08:  // Cursor Left
+		case 0x08:  // BS Cursor Left
 			cursorLeft();
 			break;
-		case 0x09:  // Cursor Right
+		case 0x09:  // HT Cursor Right
 			cursorRight();
 			break;
-		case 0x0A:  // Cursor Down
+		case 0x0A:  // LF Cursor Down
 			cursorDown();
 			break;
-		case 0x0B:  // Cursor Up
+		case 0x0B:  // VT Cursor Up
 			cursorUp();
 			break;
-		case 0x0C:  // CLS
+		case 0x0C:  // FF CLS
 			cls(false);
 			break;
 		case 0x0D:  // CR
 			cursorCR();
 			break;
-		case 0x0E:	// Paged mode ON
+			// Strange a font set selector is a scroll lock
+		case 0x0E:	// SO Paged mode ON
 			setPagedMode(true);
 			break;
-		case 0x0F:	// Paged mode OFF
+		case 0x0F:	// SI Paged mode OFF
 			setPagedMode(false);
 			break;
-		case 0x10:	// CLG
+		case 0x10:	// DLE CLG
 			clg();
 			break;
-		case 0x11:	// COLOUR
+		case 0x11:	// DC1 COLOUR
 			vdu_colour();
 			break;
-		case 0x12:  // GCOL
+		case 0x12:  // DC2 GCOL
 			vdu_gcol();
 			break;
-		case 0x13:	// Define Logical Colour
+		case 0x13:	// DC3 Define Logical Colour
 			vdu_palette();
 			break;
-		case 0x14:	// Restore Colours?
+		case 0x14:	// DC4 Restore Colours?
 			break;
-		case 0x15:	// Disable screen?
+		case 0x15:	// NAK Disable screen?
 			break;
-		case 0x16:  // Mode
+		case 0x16:  // SYN Mode
 			vdu_mode();
 			break;
-		case 0x17:  // VDU 23
+		case 0x17:  // ETB VDU 23
 			vdu_sys();
 			break;
-		case 0x18:	// Define a graphics viewport
+		case 0x18:	// CAN Define a graphics viewport
 			vdu_graphicsViewport();
 			break;
-		case 0x19:  // PLOT
+		case 0x19:  // EM PLOT
 			vdu_plot();
 			break;
-		case 0x1A:	// Reset text and graphics viewports
+		case 0x1A:	// SUB Reset text and graphics viewports
 			vdu_resetViewports();
 			break;
-		case 0x1B:  // Escape
+		case 0x1B:  // ESC Escape
 			vdu_escape();
 			break;
-		case 0x1C:	// Define a text viewport
+		case 0x1C:	// FS Define a text viewport
 			vdu_textViewport();
 			break;
-		case 0x1D:	// VDU_29
+		case 0x1D:	// GS VDU_29
 			vdu_origin();
 			break;
-		case 0x1E:	// Move cursor to top left of the viewport
+		case 0x1E:	// RS Move cursor to top left of the viewport
 			cursorHome();
 			break;
-		case 0x1F:	// TAB(X,Y)
+		case 0x1F:	// US TAB(X,Y)
 			vdu_cursorTab();
 			break;
 		case 0x20 ... 0x7E:
 		case 0x80 ... 0xFF:
 			plotCharacter(c);
 			break;
-		case 0x7F:  // Backspace
+		case 0x7F:  // DEL Backspace
 			plotBackspace();
 			break;
 	}

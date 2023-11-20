@@ -17,6 +17,7 @@
 
 extern void switchTerminalMode();				// Switch to terminal mode
 extern void setConsoleMode(bool mode);			// Set console mode
+extern void setWansiMode(bool mode);			// Set wansi mode
 
 bool			initialised = false;			// Is the system initialised yet?
 ESP32Time		rtc(0);							// The RTC
@@ -60,6 +61,10 @@ void VDUStreamProcessor::wait_eZ80() {
 // VDU 23,mode
 //
 void VDUStreamProcessor::vdu_sys() {
+	// ETB 23 handler in wansi mode too
+	// In wansi mode no attempt is made to make any of the information
+	// consistent with terminal state.
+	// So for example it doesn't really make sense for cursor state X, Y.
 	auto mode = readByte_t();
 
 	//
@@ -71,7 +76,7 @@ void VDUStreamProcessor::vdu_sys() {
 	//
 	// If mode < 32, then it's a system command
 	//
-	else if (mode < 32 || mode == 127) { // and delete character as glyph?
+	else if (mode < 32) { // and delete character as glyph?
 		switch (mode) {
 			case 0x00: {					// VDU 23, 0
 	  			vdu_sys_video();			// Video system control
@@ -172,9 +177,6 @@ void VDUStreamProcessor::vdu_sys() {
 			case 0x1F: {					// VDU 23, 31
 			 
 			}	break;
-			case 0x7F: {          // VDU 23, 127 = ACK SYNC VK_SYSREQ
-				vdu_sys_delete();
-			} break;
 		}
 	}
 	//
@@ -183,6 +185,9 @@ void VDUStreamProcessor::vdu_sys() {
 	// Redefine character with ASCII code mode
 	//
 	else {
+		if(mode == 0x7F) {
+			vdu_sys_delete();	// VDU 23, 127 = (C) char
+		}
 		vdu_sys_udg(mode);
 	}
 }
@@ -269,9 +274,14 @@ void VDUStreamProcessor::vdu_sys_video() {
 		case VDP_SWITCHBUFFER: {		// VDU 23, 0, &C3
 			switchBuffer();
 		}	break;
+		case VDP_WANSIMODE: {			// VDU 23, 0, &FD, n
+			auto b = readByte_t();
+			setWansiMode((bool) b);
+		}	break;
 		case VDP_CONSOLEMODE: {			// VDU 23, 0, &FE, n
 			auto b = readByte_t();
 			setConsoleMode((bool) b);
+			// Some of the other modes will disable this by a process sequence
 		}	break;
 		case VDP_TERMINALMODE: {		// VDU 23, 0, &FF
 			switchTerminalMode(); 		// Switch to terminal mode
@@ -582,17 +592,8 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 // VDU 23, 127
 //
 void VDUStreamProcessor::vdu_sys_delete() {
-	uint8_t packet[] = {
-		0,
-		0,
-		fabgl::VK_SYSREQ,// send key down/up system request for checking progress
-		1,
-	};
-	send_packet(PACKET_KEYCODE, sizeof packet, packet);
-	packet[3] = 0;// key up
-	// if you're worried about it then check the physical velocities of keys. :D
-	send_packet(PACKET_KEYCODE, sizeof packet, packet);
-	debug_log("vdu_sys_delete: Acknowledge action ready\n\r");
+	plotCharacter(127);
+	debug_log("vdu_sys_delete: Copyright? Is it in the source?\n\r");
 }
 
 // VDU 23, c, n1, n2, n3, n4, n5, n6, n7, n8: Redefine a display character
