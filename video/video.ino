@@ -176,7 +176,22 @@ void do_keyboard() {
 void do_keyboard_terminal() {
 	uint8_t ascii;
 	if(wansiMode) {
-		do_keyboard();//regular keyboard
+		// as Terminal is not active it won't get keys
+		// it will however send to the serial port ... unless
+		// any control return sequences
+		// In a crazy way it just sends back an ASCII
+		if (Terminal.available()) {
+			uint8_t keycode = Terminal.read();
+			// Create and send the packet back to MOS
+			//
+			uint8_t packet[] = {
+				keycode,
+				0,
+				0,
+				1,
+			};
+			processor->send_packet(PACKET_KEYCODE, sizeof packet, packet);
+		}
 		// Write anything read from z80 to the screen
 		//
 		while (processor->byteAvailable()) {
@@ -269,8 +284,15 @@ void switchTerminalMode() {
 //
 void setWansiMode(bool mode) {
 	wansiMode = mode;
-	if(mode) switchTerminalMode();
-	else {
+	if(mode) {
+		cls(true);
+		canvas.reset();
+		Terminal.begin(_VGAController.get());	
+		Terminal.connectLocally();
+		Terminal.enableCursor(true);
+		terminalMode = true;
+		Terminal.activate(TerminalTransition::None);
+	} else {
 		terminalMode = false;
 		Terminal.end();
 		cls(true);
