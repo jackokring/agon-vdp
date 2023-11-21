@@ -61,7 +61,7 @@ are used. This may change later (check `platformio.ini` for dependancies).
  * `VDU 23, 0, &C1, n` altered so maybe one day MOS will send byte `$040043` as
  `n` when running binaries for version control. Oh, I can dream. It's my fork.
  I checked, MOS maybe thinks it's a string NUL terminal.
- * `#define EMULATED` in `agon.h` for emulator skip `#ifndef`.
+ * Notice `USERSPACE` is defined in the emulator VDP `Makefile`.
  * `-emulation-kill` file suffix for compile for emulator "red zone".
 
 ## The Emulator VDP
@@ -75,9 +75,9 @@ The emulator throws a segmentation fault panic when closed. This happens late
 in the shutdown phase, after most of the threads have finished. This is
 likely related to closing and unloading the dynamic library.
 
-The repository builds with `PlatformIO` using VSCode. `//#define EMULATED` in
-`agon.h` is required if you want all the hardware features including ones
-not currently supported in the emulator.
+The repository builds with `PlatformIO` using VSCode, and via the command line
+using an install of `sudo install pipx` making the commands from
+`pipx install platformio`. This makes `pio` available by adding it to `$PATH`.
 
 [The Emulator Fork](https://github.com/jackokring/fab-agon-emulator/tree/main)
 contains all the alternate repositories I'm using as git submodules. This

@@ -18,6 +18,8 @@
 extern void switchTerminalMode();				// Switch to terminal mode
 extern void setConsoleMode(bool mode);			// Set console mode
 extern void setWansiMode(bool mode);			// Set wansi mode
+extern bool	wansiMode;
+extern fabgl::Terminal Terminal;
 
 bool			initialised = false;			// Is the system initialised yet?
 ESP32Time		rtc(0);							// The RTC
@@ -592,7 +594,10 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 // VDU 23, 127
 //
 void VDUStreamProcessor::vdu_sys_delete() {
-	plotCharacter(127);
+	if(wansiMode) {
+		// apparently the plot causes issues in emulator
+		Terminal.write(127);//play nice with terminal mode
+	} else plotCharacter(127);
 	debug_log("vdu_sys_delete: Copyright? Is it in the source?\n\r");
 }
 

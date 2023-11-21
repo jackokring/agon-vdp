@@ -12,10 +12,6 @@ uint8_t * free256() {
   return fabgl::FONT_AGON_DATA;
 }
 
-uint8_t * free8() {
-  return fabgl::FONT_AGON_DATA + 127 * 8;// DEL
-}
-
 // free buffers in ttxt_instance unsigned short *
 // unsigned char *m_font_data_norm, *m_font_data_top, *m_font_data_bottom;
 // lower 32, 128 to 159. Both 19 and 20 height.

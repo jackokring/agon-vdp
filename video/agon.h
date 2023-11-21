@@ -16,7 +16,8 @@
 #pragma once
 
 // skip things which kill emulation or are not yet implemented in emulation
-#define EMULATED
+//#define EMULATED
+// Use USERSPACE as set via -D compilier flag option for easy auto
 
 #define EPOCH_YEAR				1980	// 1-byte dates are offset from this (for FatFS)
 #define MAX_SPRITES				256		// Maximum number of sprites

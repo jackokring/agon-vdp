@@ -79,7 +79,7 @@ bool			wansiMode = false;				// Serial wansi mode (0 = off, 1 = console enabled)
 fabgl::Terminal			Terminal;				// Used for CP/M mode
 VDUStreamProcessor *	processor;				// VDU Stream Processor
 
-#ifndef EMULATED
+#ifndef USERSPACE
 #include "zdi.h"								// ZDI debugging console
 #endif
 
@@ -105,7 +105,7 @@ void loop() {
 	auto cursorTime = millis();
 
 	while (true) {
-#ifdef EMULATED
+#ifdef USERSPACE
 		// thread pause delay perhaps to free locks on close?
 		uint32_t count = 0;
 	 	if ((count & 0x7f) == 0) delay(1 /* -TM- ms */);
