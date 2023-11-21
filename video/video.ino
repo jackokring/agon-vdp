@@ -301,7 +301,7 @@ void setWansiMode(bool mode) {
 		terminalMode = false;
 		Terminal.end();
 		canvas.reset();
-		copy_font();
+		//copy_font();//save UDG
 		set_mode(1);
 	}
 }
