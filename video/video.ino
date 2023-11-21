@@ -293,6 +293,7 @@ void setWansiMode(bool mode) {
 		canvas.reset();
 		Terminal.begin(_VGAController.get());	
 		//Terminal.connectLocally();//should connect keys and buff but doesn't
+		Terminal.loadFont(&fabgl::FONT_AGON);//UDG
 		Terminal.enableCursor(true);
 		terminalMode = true;
 	} else {
