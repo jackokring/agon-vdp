@@ -187,7 +187,7 @@ void do_keyboard_terminal() {
 			uint8_t packet[] = {
 				keycode,
 				0,
-				0,
+				(uint8_t)fabgl::VK_ASCII,// lazy op? <256 not zero
 				1,
 			};
 			processor->send_packet(PACKET_KEYCODE, sizeof packet, packet);
