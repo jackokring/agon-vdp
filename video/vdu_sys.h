@@ -596,7 +596,7 @@ void VDUStreamProcessor::vdu_sys_cursorBehaviour() {
 void VDUStreamProcessor::vdu_sys_delete() {
 	if(wansiMode) {
 		// apparently the plot causes issues in emulator
-		Terminal.write(127);//play nice with terminal mode
+		Terminal.printf("(C)");//play nice with terminal mode
 	} else plotCharacter(127);
 	debug_log("vdu_sys_delete: Copyright? Is it in the source?\n\r");
 }

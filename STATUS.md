@@ -37,7 +37,8 @@ are used. This may change later (check `platformio.ini` for dependancies).
      driver is needed. There is an intercept on `^W` ASCII `ETB` to get
      `VDU 23, ...` working. Being terminal though no attempt is made to
      synchronize the VDP cursor with the terminal cursor. By default
-     the terminal is about a `VT100`.
+     the terminal is `ANSI` with cursor and `DEL` translation to use BBC
+     style navigation.
  * `Mode 7` codes 128+ (0, 14, 15, 16, 27) technically free control codes.
    * Apparently I've done 24 instead of 25 lines.
      * I think it might encourage some restriction thinking.

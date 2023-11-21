@@ -171,6 +171,10 @@ void do_keyboard() {
 	}
 }
 
+const char * const transCursor[4] = {
+	"\e[D", "\e[C", "\e[B", "\e[A",//8 LRDU
+};
+
 // Handle the keyboard: CP/M Terminal Mode
 // 
 void do_keyboard_terminal() {
@@ -189,11 +193,17 @@ void do_keyboard_terminal() {
 		//
 		while (processor->byteAvailable()) {
 			uint8_t c = processor->readByte();
-			if(c == 23 || !wansiMode) {
+			if(c == 23 || !wansiMode) {//don't need null translation
 				// ETB - ^W
 				processor->vdu(c);
 			} else {
-				Terminal.write(c);//ok as * prompt
+				if(c < 12 && c > 7) {
+					const char * const s = transCursor[c - 8];
+					Terminal.printf(s);//for sensible cursors
+				} else {
+					if(c == 127) Terminal.write(8);//BS
+					else Terminal.write(c);//ok as * prompt
+				}
 			}
 		}
 	} else {
