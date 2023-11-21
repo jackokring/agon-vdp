@@ -180,18 +180,11 @@ void do_keyboard_terminal() {
 		// it will however send to the serial port ... unless
 		// any control return sequences
 		// In a crazy way it just sends back an ASCII
-		if (Terminal.available()) {
-			uint8_t keycode = Terminal.read();
-			// Create and send the packet back to MOS
-			//
-			uint8_t packet[] = {
-				keycode,
-				0,
-				(uint8_t)fabgl::VK_ASCII,// lazy op? <256 not zero
-				1,
-			};
-			processor->send_packet(PACKET_KEYCODE, sizeof packet, packet);
-		}
+		do_keyboard();//Not ANSI input
+		// Returned send() seems to go into the aether
+		// Apparently you can't have everything
+		// but you've got something.
+		
 		// Write anything read from z80 to the screen
 		//
 		while (processor->byteAvailable()) {
@@ -200,7 +193,7 @@ void do_keyboard_terminal() {
 				// ETB - ^W
 				processor->vdu_sys();
 			} else {
-				Terminal.write(c);
+				Terminal.write(c);//ok as * prompt
 			}
 		}
 	} else {
@@ -288,12 +281,13 @@ void setWansiMode(bool mode) {
 		cls(true);
 		canvas.reset();
 		Terminal.begin(_VGAController.get());	
-		Terminal.connectLocally();
+		//Terminal.connectLocally();//should connect keys and buff but doesn't
 		Terminal.enableCursor(true);
 		terminalMode = true;
-		Terminal.activate(TerminalTransition::None);
 	} else {
 		terminalMode = false;
+		Terminal.enableCursor(false);
+		//Terminal.disconnectLocally();
 		Terminal.end();
 		cls(true);
 		canvas.reset();
