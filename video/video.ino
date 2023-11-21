@@ -189,9 +189,9 @@ void do_keyboard_terminal() {
 		//
 		while (processor->byteAvailable()) {
 			uint8_t c = processor->readByte();
-			if(c == 23) {
+			if(c == 23 || !wansiMode) {
 				// ETB - ^W
-				processor->vdu_sys();
+				processor->vdu(c);
 			} else {
 				Terminal.write(c);//ok as * prompt
 			}
@@ -276,6 +276,7 @@ void switchTerminalMode() {
 // - mode: 0 = off, 1 = on
 //
 void setWansiMode(bool mode) {
+	if(mode == wansiMode) return;
 	wansiMode = mode;
 	if(mode) {
 		cls(true);
@@ -285,12 +286,12 @@ void setWansiMode(bool mode) {
 		Terminal.enableCursor(true);
 		terminalMode = true;
 	} else {
-		terminalMode = false;
-		Terminal.enableCursor(false);
 		//Terminal.disconnectLocally();
+		terminalMode = false;
 		Terminal.end();
-		cls(true);
 		canvas.reset();
+		copy_font();
+		set_mode(1);
 	}
 }
 

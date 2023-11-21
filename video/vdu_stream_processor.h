@@ -34,6 +34,7 @@ class VDUStreamProcessor {
 		void vdu_origin();
 		void vdu_cursorTab();
 
+		void vdu_sys();// moved back here as vdu(23) works
 		void vdu_sys_video();
 		void sendGeneralPoll();
 		void vdu_sys_video_kblayout();
@@ -116,7 +117,6 @@ class VDUStreamProcessor {
 		uint8_t processNext();//return next for DBGSerial in video.ino
 
 		void vdu(uint8_t c);
-		void vdu_sys();// moved here to be public for wansi mode
 
 		void wait_eZ80();
 		void sendModeInformation();
