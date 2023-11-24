@@ -93,6 +93,11 @@ void setup() {
 	setupKeyboardAndMouse();
 	init_audio();
 	copy_font();
+	// onUserSequence is triggered whenever a User Sequence has been received
+	// (ESC + '_#' ... '$'), where '...' is sent here
+	Terminal.onUserSequence = [&](char const * seq) {
+		
+	};
 	set_mode(1);
 	processor->sendModeInformation();
 	boot_screen();
